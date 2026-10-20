@@ -15,66 +15,48 @@
     .hero p { font-size: 1.05rem; opacity: .9; max-width: 480px; margin: 0 auto 1.5rem; }
     .btn-hero { display: inline-block; background: #fff; color: var(--green); font-size: 1rem; font-weight: 700; padding: .85rem 2rem; border-radius: 50px; cursor: pointer; border: none; box-shadow: 0 4px 16px rgba(0,0,0,.15); transition: transform .15s; }
     .btn-hero:hover { transform: scale(1.04); }
-
     .funnel { max-width: 520px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     .step { display: none; }
     .step.active { display: block; animation: fadeIn .3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
     .card { background: #fff; border-radius: 16px; padding: 1.75rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     .step-label { font-size: .78rem; font-weight: 600; letter-spacing: .06em; color: #9ca3af; text-transform: uppercase; margin-bottom: .5rem; }
     .step-question { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.25rem; color: #111; }
-
     .btn-choice { display: block; width: 100%; padding: .9rem 1.25rem; border: 2px solid #e5e7eb; border-radius: 12px; background: #fff; font-size: 1rem; font-weight: 500; cursor: pointer; margin-bottom: .75rem; text-align: left; transition: all .15s; }
     .btn-choice:hover { border-color: var(--green); color: var(--green); }
-    .btn-choice.selected { border-color: var(--green); background: #f0fdf4; color: var(--green); }
-
     .input-group { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
     .input-group label { font-size: .9rem; font-weight: 500; color: #374151; }
     .input-group input { padding: .8rem 1rem; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem; outline: none; transition: border-color .15s; }
     .input-group input:focus { border-color: var(--green); }
-
     .cashback-box { background: #f0fdf4; border: 2px solid var(--green); border-radius: 12px; text-align: center; padding: 1.25rem; margin-bottom: 1.25rem; }
     .cashback-label { font-size: .85rem; color: #16a34a; font-weight: 500; }
     .cashback-value { font-size: 2.2rem; font-weight: 800; color: var(--green); }
-
     .btn-primary { display: block; width: 100%; padding: .9rem; background: var(--green); color: #fff; font-size: 1rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; margin-top: .75rem; transition: opacity .15s; }
     .btn-primary:hover { opacity: .9; }
     .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
-
     .progress { display: flex; gap: 4px; margin-bottom: 1.25rem; }
     .progress-dot { flex: 1; height: 4px; background: #e5e7eb; border-radius: 2px; transition: background .3s; }
     .progress-dot.done { background: var(--green); }
-
     .pix-options { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1rem; }
     .pix-opt { padding: .85rem; border: 2px solid #e5e7eb; border-radius: 12px; text-align: center; cursor: pointer; font-size: .92rem; font-weight: 500; background: #fff; transition: all .15s; }
     .pix-opt:hover, .pix-opt.selected { border-color: var(--green); background: #f0fdf4; color: var(--green); }
-
     .success-icon { font-size: 3.5rem; text-align: center; margin-bottom: .75rem; }
     .success-title { font-size: 1.4rem; font-weight: 700; text-align: center; margin-bottom: .5rem; }
     .success-msg { text-align: center; color: #6b7280; margin-bottom: 1.5rem; font-size: .95rem; line-height: 1.5; }
     .success-badge { display: inline-block; background: #f0fdf4; color: var(--green); padding: .5rem 1.25rem; border-radius: 50px; font-weight: 700; font-size: 1.1rem; border: 1.5px solid var(--green); }
-
     footer { text-align: center; padding: 1.5rem 1rem; color: #9ca3af; font-size: .8rem; }
     .error-msg { color: #ef4444; font-size: .85rem; margin-top: .4rem; display: none; }
     .error-msg.visible { display: block; }
   </style>
 </head>
 <body>
-
-<header>
-  <div class="logo">{{marca_nome}}</div>
-</header>
-
+<header><div class="logo">{{marca_nome}}</div></header>
 <div class="hero" id="hero-section">
   <h1>{{titulo_principal}}</h1>
   <p>{{subtitulo}}</p>
   <button class="btn-hero" onclick="startFunnel()">{{botao_topo_texto}}</button>
 </div>
-
 <div class="funnel" id="funnel" style="display:none">
-
-  <!-- Step 1 -->
   <div class="step active" id="step-1">
     <div class="card">
       <div class="progress"><div class="progress-dot done"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
@@ -84,35 +66,21 @@
       <button class="btn-choice" onclick="handleStep1('nao')">❌ Não possuo cartão</button>
     </div>
   </div>
-
-  <!-- Step 2 -->
   <div class="step" id="step-2">
     <div class="card">
       <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
       <div class="step-label">Passo 2 de 5</div>
       <div class="step-question">{{passo2_pergunta}}</div>
-      <div class="input-group">
-        <label for="fatura-input">Valor da fatura</label>
-        <input type="text" id="fatura-input" placeholder="R$ 0,00" inputmode="decimal">
-        <span class="error-msg" id="fatura-error">Por favor, informe um valor válido.</span>
-      </div>
-      <div class="cashback-box" id="cashback-preview" style="display:none">
-        <div class="cashback-label">Seu cashback estimado</div>
-        <div class="cashback-value" id="cashback-display">R$ 0,00</div>
-      </div>
+      <div class="input-group"><label for="fatura-input">Valor da fatura</label><input type="text" id="fatura-input" placeholder="R$ 0,00" inputmode="decimal"><span class="error-msg" id="fatura-error">Por favor, informe um valor válido.</span></div>
+      <div class="cashback-box" id="cashback-preview" style="display:none"><div class="cashback-label">Seu cashback estimado</div><div class="cashback-value" id="cashback-display">R$ 0,00</div></div>
       <button class="btn-primary" onclick="handleStep2()">Continuar →</button>
     </div>
   </div>
-
-  <!-- Step 3 -->
   <div class="step" id="step-3">
     <div class="card">
       <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
       <div class="step-label">Passo 3 de 5</div>
-      <div class="cashback-box" style="margin-bottom:1rem">
-        <div class="cashback-label">{{passo3_titulo}}</div>
-        <div class="cashback-value" id="cashback-confirm">R$ 0,00</div>
-      </div>
+      <div class="cashback-box" style="margin-bottom:1rem"><div class="cashback-label">{{passo3_titulo}}</div><div class="cashback-value" id="cashback-confirm">R$ 0,00</div></div>
       <div class="step-question">{{passo3_pergunta}}</div>
       <div class="pix-options">
         <div class="pix-opt" onclick="selectPix('cpf','CPF')">🪪 CPF</div>
@@ -123,43 +91,25 @@
       <button class="btn-primary" id="btn-step3" onclick="handleStep3()" disabled>Continuar →</button>
     </div>
   </div>
-
-  <!-- Step 4 -->
   <div class="step" id="step-4">
     <div class="card">
       <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot"></div></div>
       <div class="step-label">Passo 4 de 5</div>
       <div class="step-question">{{passo4_pergunta}}</div>
-      <div class="input-group">
-        <label for="tel-input">WhatsApp / Telefone</label>
-        <input type="tel" id="tel-input" placeholder="(11) 91234-5678" inputmode="tel">
-        <span class="error-msg" id="tel-error">Por favor, informe um telefone válido.</span>
-      </div>
+      <div class="input-group"><label for="tel-input">WhatsApp / Telefone</label><input type="tel" id="tel-input" placeholder="(11) 91234-5678" inputmode="tel"><span class="error-msg" id="tel-error">Por favor, informe um telefone válido.</span></div>
       <button class="btn-primary" onclick="handleStep4()">Continuar →</button>
     </div>
   </div>
-
-  <!-- Step 5 -->
   <div class="step" id="step-5">
     <div class="card">
       <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div></div>
       <div class="step-label">Passo 5 de 5</div>
       <div class="step-question">{{passo5_pergunta}}</div>
-      <div class="input-group">
-        <label for="cpf-input">CPF</label>
-        <input type="text" id="cpf-input" placeholder="000.000.000-00" inputmode="numeric" maxlength="14">
-        <span class="error-msg" id="cpf-error">Informe um CPF válido.</span>
-      </div>
-      <div class="input-group">
-        <label for="nome-input">Nome completo</label>
-        <input type="text" id="nome-input" placeholder="Seu nome completo">
-        <span class="error-msg" id="nome-error">Informe seu nome completo.</span>
-      </div>
+      <div class="input-group"><label for="cpf-input">CPF</label><input type="text" id="cpf-input" placeholder="000.000.000-00" inputmode="numeric" maxlength="14"><span class="error-msg" id="cpf-error">Informe um CPF válido.</span></div>
+      <div class="input-group"><label for="nome-input">Nome completo</label><input type="text" id="nome-input" placeholder="Seu nome completo"><span class="error-msg" id="nome-error">Informe seu nome completo.</span></div>
       <button class="btn-primary" id="btn-submit" onclick="handleSubmit()">Liberar meu cashback 🎉</button>
     </div>
   </div>
-
-  <!-- Success -->
   <div class="step" id="step-success">
     <div class="card">
       <div class="success-icon">🎉</div>
@@ -168,148 +118,27 @@
       <div style="text-align:center"><span class="success-badge" id="success-badge"></span></div>
     </div>
   </div>
-
 </div>
-
 <footer>{{rodape_legal}}</footer>
-
 <script>
 const CASHBACK_PCT = {{cashback_percent}} / 100;
 const MSG_FINAL = `{{mensagem_final}}`;
 const PRAZO = `{{prazo_pagamento}}`;
-
 let data = { fatura: 0, cashback: 0, tipo_chave: '', chave_pix: '', telefone: '', cpf: '', nome: '' };
-
-function startFunnel() {
-  document.getElementById('hero-section').style.display = 'none';
-  document.getElementById('funnel').style.display = 'block';
-}
-
-function showStep(n) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step-' + n).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function handleStep1(choice) {
-  if (choice === 'nao') {
-    showStep('success');
-    document.getElementById('success-title').textContent = 'Que pena! 😕';
-    document.getElementById('success-msg').textContent = 'O serviço de cashback é exclusivo para portadores de cartão de crédito. Fique de olho nas novidades!';
-    document.getElementById('success-badge').textContent = '';
-    return;
-  }
-  showStep(2);
-}
-
+function startFunnel() { document.getElementById('hero-section').style.display = 'none'; document.getElementById('funnel').style.display = 'block'; }
+function showStep(n) { document.querySelectorAll('.step').forEach(s => s.classList.remove('active')); document.getElementById('step-' + n).classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function handleStep1(choice) { if (choice === 'nao') { showStep('success'); document.getElementById('success-title').textContent = 'Que pena! 😕'; document.getElementById('success-msg').textContent = 'O serviço de cashback é exclusivo para portadores de cartão de crédito.'; document.getElementById('success-badge').textContent = ''; return; } showStep(2); }
 const faturaInput = document.getElementById('fatura-input');
-faturaInput.addEventListener('input', () => {
-  let raw = faturaInput.value.replace(/\D/g, '');
-  if (!raw) { document.getElementById('cashback-preview').style.display = 'none'; return; }
-  const cents = parseInt(raw, 10);
-  const val = cents / 100;
-  faturaInput.value = 'R$ ' + val.toFixed(2).replace('.', ',');
-  const cb = val * CASHBACK_PCT;
-  document.getElementById('cashback-display').textContent = 'R$ ' + cb.toFixed(2).replace('.', ',');
-  document.getElementById('cashback-preview').style.display = 'block';
-});
-
-function handleStep2() {
-  const raw = faturaInput.value.replace(/[^\d,]/g, '').replace(',', '.');
-  const val = parseFloat(raw);
-  if (!val || val < 10) {
-    document.getElementById('fatura-error').classList.add('visible');
-    return;
-  }
-  document.getElementById('fatura-error').classList.remove('visible');
-  data.fatura = val;
-  data.cashback = Math.round(val * CASHBACK_PCT * 100) / 100;
-  document.getElementById('cashback-confirm').textContent = 'R$ ' + data.cashback.toFixed(2).replace('.', ',');
-  showStep(3);
-}
-
-function selectPix(tipo, label) {
-  document.querySelectorAll('.pix-opt').forEach(el => el.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-  data.tipo_chave = tipo;
-  data.chave_pix = tipo; // will be refined or user's cpf/tel
-  document.getElementById('btn-step3').disabled = false;
-}
-
-function handleStep3() {
-  if (!data.tipo_chave) return;
-  showStep(4);
-}
-
+faturaInput.addEventListener('input', () => { let raw = faturaInput.value.replace(/\D/g, ''); if (!raw) { document.getElementById('cashback-preview').style.display = 'none'; return; } const cents = parseInt(raw, 10); const val = cents / 100; faturaInput.value = 'R$ ' + val.toFixed(2).replace('.', ','); const cb = val * CASHBACK_PCT; document.getElementById('cashback-display').textContent = 'R$ ' + cb.toFixed(2).replace('.', ','); document.getElementById('cashback-preview').style.display = 'block'; });
+function handleStep2() { const raw = faturaInput.value.replace(/[^\d,]/g, '').replace(',', '.'); const val = parseFloat(raw); if (!val || val < 10) { document.getElementById('fatura-error').classList.add('visible'); return; } document.getElementById('fatura-error').classList.remove('visible'); data.fatura = val; data.cashback = Math.round(val * CASHBACK_PCT * 100) / 100; document.getElementById('cashback-confirm').textContent = 'R$ ' + data.cashback.toFixed(2).replace('.', ','); showStep(3); }
+function selectPix(tipo, label) { document.querySelectorAll('.pix-opt').forEach(el => el.classList.remove('selected')); event.currentTarget.classList.add('selected'); data.tipo_chave = tipo; data.chave_pix = tipo; document.getElementById('btn-step3').disabled = false; }
+function handleStep3() { if (!data.tipo_chave) return; showStep(4); }
 const telInput = document.getElementById('tel-input');
-telInput.addEventListener('input', () => {
-  let raw = telInput.value.replace(/\D/g, '').slice(0, 11);
-  if (raw.length > 6) raw = raw.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
-  else if (raw.length > 2) raw = raw.replace(/(\d{2})(\d{0,5})/, '($1) $2');
-  telInput.value = raw;
-});
-
-function handleStep4() {
-  const raw = telInput.value.replace(/\D/g, '');
-  if (raw.length < 10) { document.getElementById('tel-error').classList.add('visible'); return; }
-  document.getElementById('tel-error').classList.remove('visible');
-  data.telefone = raw;
-  if (data.tipo_chave === 'telefone') data.chave_pix = raw;
-  showStep(5);
-}
-
+telInput.addEventListener('input', () => { let raw = telInput.value.replace(/\D/g, '').slice(0, 11); if (raw.length > 6) raw = raw.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3'); else if (raw.length > 2) raw = raw.replace(/(\d{2})(\d{0,5})/, '($1) $2'); telInput.value = raw; });
+function handleStep4() { const raw = telInput.value.replace(/\D/g, ''); if (raw.length < 10) { document.getElementById('tel-error').classList.add('visible'); return; } document.getElementById('tel-error').classList.remove('visible'); data.telefone = raw; if (data.tipo_chave === 'telefone') data.chave_pix = raw; showStep(5); }
 const cpfInput = document.getElementById('cpf-input');
-cpfInput.addEventListener('input', () => {
-  let raw = cpfInput.value.replace(/\D/g, '').slice(0, 11);
-  if (raw.length > 9) raw = raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  else if (raw.length > 6) raw = raw.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
-  else if (raw.length > 3) raw = raw.replace(/(\d{3})(\d{0,3})/, '$1.$2');
-  cpfInput.value = raw;
-});
-
-async function handleSubmit() {
-  const cpfRaw = cpfInput.value.replace(/\D/g, '');
-  const nome = document.getElementById('nome-input').value.trim();
-  let ok = true;
-  if (cpfRaw.length !== 11) { document.getElementById('cpf-error').classList.add('visible'); ok = false; } else document.getElementById('cpf-error').classList.remove('visible');
-  if (nome.length < 4) { document.getElementById('nome-error').classList.add('visible'); ok = false; } else document.getElementById('nome-error').classList.remove('visible');
-  if (!ok) return;
-
-  data.cpf = cpfRaw;
-  data.nome = nome;
-  if (data.tipo_chave === 'cpf') data.chave_pix = cpfRaw;
-
-  const btn = document.getElementById('btn-submit');
-  btn.disabled = true;
-  btn.textContent = 'Aguarde...';
-
-  try {
-    const resp = await fetch('/api/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    const json = await resp.json();
-
-    if (json.ok) {
-      const firstName = nome.split(' ')[0];
-      const cbStr = 'R$ ' + data.cashback.toFixed(2).replace('.', ',');
-      const msg = MSG_FINAL.replace('{nome}', firstName).replace('{valor}', cbStr);
-      document.getElementById('success-title').textContent = `Tudo certo, ${firstName}! 🎉`;
-      document.getElementById('success-msg').innerHTML = msg + `<br><br><strong>Prazo de pagamento: ${PRAZO}</strong>`;
-      document.getElementById('success-badge').textContent = cbStr + ' aprovados';
-      showStep('success');
-    } else {
-      btn.disabled = false;
-      btn.textContent = 'Liberar meu cashback 🎉';
-      alert('Erro: ' + (json.erro || 'Tente novamente.'));
-    }
-  } catch (e) {
-    btn.disabled = false;
-    btn.textContent = 'Liberar meu cashback 🎉';
-    alert('Erro de conexão. Tente novamente.');
-  }
-}
+cpfInput.addEventListener('input', () => { let raw = cpfInput.value.replace(/\D/g, '').slice(0, 11); if (raw.length > 9) raw = raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); else if (raw.length > 6) raw = raw.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3'); else if (raw.length > 3) raw = raw.replace(/(\d{3})(\d{0,3})/, '$1.$2'); cpfInput.value = raw; });
+async function handleSubmit() { const cpfRaw = cpfInput.value.replace(/\D/g, ''); const nome = document.getElementById('nome-input').value.trim(); let ok = true; if (cpfRaw.length !== 11) { document.getElementById('cpf-error').classList.add('visible'); ok = false; } else document.getElementById('cpf-error').classList.remove('visible'); if (nome.length < 4) { document.getElementById('nome-error').classList.add('visible'); ok = false; } else document.getElementById('nome-error').classList.remove('visible'); if (!ok) return; data.cpf = cpfRaw; data.nome = nome; if (data.tipo_chave === 'cpf') data.chave_pix = cpfRaw; const btn = document.getElementById('btn-submit'); btn.disabled = true; btn.textContent = 'Aguarde...'; try { const resp = await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); const json = await resp.json(); if (json.ok) { const firstName = nome.split(' ')[0]; const cbStr = 'R$ ' + data.cashback.toFixed(2).replace('.', ','); const msg = MSG_FINAL.replace('{nome}', firstName).replace('{valor}', cbStr); document.getElementById('success-title').textContent = `Tudo certo, ${firstName}! 🎉`; document.getElementById('success-msg').innerHTML = msg + `<br><br><strong>Prazo: ${PRAZO}</strong>`; document.getElementById('success-badge').textContent = cbStr + ' aprovados'; showStep('success'); } else { btn.disabled = false; btn.textContent = 'Liberar meu cashback 🎉'; alert('Erro: ' + (json.erro || 'Tente novamente.')); } } catch (e) { btn.disabled = false; btn.textContent = 'Liberar meu cashback 🎉'; alert('Erro de conexão. Tente novamente.'); } }
 </script>
 </body>
 </html>

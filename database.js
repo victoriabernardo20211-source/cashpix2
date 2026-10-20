@@ -49,7 +49,6 @@ async function initDb() {
       );
     `);
 
-    // Seed super admin if not exists
     const { rows: existing } = await client.query(
       'SELECT id FROM admins WHERE email = $1',
       ['admin@cashpix.com']
@@ -63,7 +62,6 @@ async function initDb() {
       console.log('[DB] Super admin criado: admin@cashpix.com / Admin@2024!');
     }
 
-    // Seed default site config
     const defaults = {
       marca_nome: 'CashPix',
       marca_slogan: 'Resgate seu cashback em 5 passos',

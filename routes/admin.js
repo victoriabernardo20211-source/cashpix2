@@ -119,19 +119,16 @@ function makeAdminRouter(adminPath) {
 
   const auth = requireAuth(adminPath);
 
-  // Root redirect
   router.get('/', (req, res) => {
     const token = req.cookies && req.cookies[COOKIE_NAME];
     if (token && verifyToken(token)) return res.redirect(`/${adminPath}/leads`);
     return res.redirect(`/${adminPath}/login`);
   });
 
-  // Login GET
   router.get('/login', (req, res) => {
     res.send(renderLogin(adminPath, ''));
   });
 
-  // Login POST
   router.post('/login', loginLimiter, express.urlencoded({ extended: false }), async (req, res) => {
     try {
       await initDb();
@@ -142,7 +139,6 @@ function makeAdminRouter(adminPath) {
       );
       const admin = rows[0];
 
-      // Always compare to prevent timing attacks
       const hash = admin ? admin.senha_hash : '$2a$12$invalidhashinvalidhashinvalidhash00';
       const ok = await bcrypt.compare(String(senha || ''), hash);
 
@@ -159,13 +155,11 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Logout
   router.post('/logout', (req, res) => {
     res.clearCookie(COOKIE_NAME, { path: '/' });
     res.redirect(`/${adminPath}/login`);
   });
 
-  // Leads list
   router.get('/leads', auth, async (req, res) => {
     try {
       await initDb();
@@ -187,7 +181,6 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Update lead status
   router.post('/leads/:id/status', auth, express.urlencoded({ extended: false }), async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
@@ -205,7 +198,6 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Export CSV
   router.get('/leads/export.csv', auth, async (req, res) => {
     try {
       const { rows: leads } = await getPool().query('SELECT * FROM leads ORDER BY created_at DESC');
@@ -224,7 +216,6 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Customize GET
   router.get('/personalizar', auth, async (req, res) => {
     try {
       await initDb();
@@ -236,7 +227,6 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Customize POST
   router.post('/personalizar', auth, express.urlencoded({ extended: false }), async (req, res) => {
     try {
       const allowed = [
