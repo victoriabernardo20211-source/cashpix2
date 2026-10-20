@@ -7,21 +7,8 @@ const { initDb } = require('./database');
 const app = express();
 const ADMIN_PATH = process.env.ADMIN_SECRET_PATH || 'gx9k2m7p';
 
-// Security headers
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", 'data:'],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'", 'data:'],
-      objectSrc: ["'none'"],
-      frameSrc: ["'self'"],
-    },
-  },
-}));
+// Security headers — CSP desativado para permitir scripts inline no funil
+app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(cookieParser());
 app.set('trust proxy', 1);
