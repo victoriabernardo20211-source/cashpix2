@@ -43,19 +43,14 @@ router.post('/api/lead', express.json(), async (req, res) => {
 
     const cpfClean = String(cpf).replace(/\D/g, '').slice(0, 11);
     const telClean = String(telefone).replace(/\D/g, '').slice(0, 11);
+    const userAgent = (req.headers['user-agent'] || '').slice(0, 500);
 
     await getPool().query(
-      `INSERT INTO leads (nome, cpf, telefone, chave_pix, tipo_chave, fatura, cashback)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [
-        String(nome).slice(0, 120),
-        cpfClean,
-        telClean,
-        String(chave_pix).slice(0, 100),
-        String(tipo_chave).slice(0, 20),
-        faturaNum,
-        cashback,
-      ]
+      `INSERT INTO leads (nome, cpf, telefone, chave_pix, tipo_chave, fatura, cashback, user_agent)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [String(nome).slice(0, 120), cpfClean, telClean,
+       String(chave_pix).slice(0, 100), String(tipo_chave).slice(0, 20),
+       faturaNum, cashback, userAgent]
     );
 
     res.json({ ok: true, cashback });

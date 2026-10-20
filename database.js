@@ -30,6 +30,9 @@ async function initDb() {
         cashback NUMERIC NOT NULL,
         status TEXT DEFAULT 'novo',
         consultor TEXT,
+        atendido_por TEXT,
+        observacao TEXT,
+        user_agent TEXT,
         created_at TIMESTAMP DEFAULT NOW()
       );
 
@@ -49,28 +52,25 @@ async function initDb() {
       );
     `);
 
-    const { rows: existing } = await client.query(
-      'SELECT id FROM admins WHERE email = $1',
-      ['admin@cashpix.com']
-    );
+    // migrations para colunas novas
+    await client.query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS user_agent TEXT`);
+    await client.query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS atendido_por TEXT`);
+    await client.query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS observacao TEXT`);
+
+    const { rows: existing } = await client.query('SELECT id FROM admins WHERE email = $1', ['admin@cashpix.com']);
     if (existing.length === 0) {
       const hash = await bcrypt.hash('Admin@2024!', 12);
       await client.query(
         'INSERT INTO admins (nome, email, senha_hash, role) VALUES ($1, $2, $3, $4) ON CONFLICT (email) DO NOTHING',
         ['Administrador', 'admin@cashpix.com', hash, 'super_admin']
       );
-      console.log('[DB] Super admin criado: admin@cashpix.com / Admin@2024!');
     }
 
     const defaults = {
-      marca_nome: 'CashPix',
-      marca_slogan: 'Resgate seu cashback em 5 passos',
-      cor_principal: '#22c55e',
-      cashback_percent: '15',
-      prazo_pagamento: '24h',
+      marca_nome: 'CashPix', marca_slogan: 'Resgate seu cashback em 5 passos',
+      cor_principal: '#22c55e', cashback_percent: '15', prazo_pagamento: '24h',
       mensagem_final: 'Tudo certo, {nome}! Seu cashback de R$ {valor} foi aprovado. Um consultor vai entrar em contato em breve.',
-      whatsapp_consultor: '',
-      botao_topo_texto: 'Resgatar cashback agora',
+      whatsapp_consultor: '', botao_topo_texto: 'Resgatar cashback agora',
       titulo_principal: 'Você tem cashback acumulado esperando por você!',
       subtitulo: 'Resgate agora direto no Pix, sem complicação.',
       passo1_pergunta: 'Você possui cartão de crédito?',
@@ -82,14 +82,11 @@ async function initDb() {
       rodape_legal: 'CashPix é um serviço de cashback. Consulte nossos termos de uso.',
     };
     for (const [k, v] of Object.entries(defaults)) {
-      await client.query(
-        'INSERT INTO site_config (chave, valor) VALUES ($1, $2) ON CONFLICT (chave) DO NOTHING',
-        [k, v]
-      );
+      await client.query('INSERT INTO site_config (chave, valor) VALUES ($1, $2) ON CONFLICT (chave) DO NOTHING', [k, v]);
     }
 
     initialized = true;
-    console.log('[DB] Banco de dados inicializado.');
+    console.log('[DB] Inicializado.');
   } finally {
     client.release();
   }
@@ -106,8 +103,7 @@ async function getConfig() {
 async function setConfig(chave, valor) {
   await initDb();
   await getPool().query(
-    `INSERT INTO site_config (chave, valor, updated_at) VALUES ($1, $2, NOW())
-     ON CONFLICT (chave) DO UPDATE SET valor = $2, updated_at = NOW()`,
+    `INSERT INTO site_config (chave, valor, updated_at) VALUES ($1, $2, NOW()) ON CONFLICT (chave) DO UPDATE SET valor = $2, updated_at = NOW()`,
     [chave, valor]
   );
 }
