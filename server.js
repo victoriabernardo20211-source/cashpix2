@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const { initDb } = require('./database');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 const ADMIN_PATH = process.env.ADMIN_SECRET_PATH || 'gx9k2m7p';
 
 // Security headers
@@ -25,8 +24,6 @@ app.use(helmet({
 }));
 
 app.use(cookieParser());
-
-// Trust proxy if behind nginx/heroku
 app.set('trust proxy', 1);
 
 // Routes
@@ -36,7 +33,7 @@ const makeAdminRouter = require('./routes/admin');
 app.use('/', publicRouter);
 app.use(`/${ADMIN_PATH}`, makeAdminRouter(ADMIN_PATH));
 
-// 404 handler - returns generic response, doesn't reveal admin path
+// 404 handler
 app.use((req, res) => {
   res.status(404).send(`<!DOCTYPE html><html><head><title>Página não encontrada</title>
 <style>body{font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#faf9f5}
@@ -45,10 +42,20 @@ app.use((req, res) => {
 <a href="/" style="display:inline-block;margin-top:1.5rem;color:#22c55e;text-decoration:none">← Voltar ao início</a></div></body></html>`);
 });
 
-// Init DB then start
-initDb();
-app.listen(PORT, () => {
-  console.log(`\n🚀 CashPix rodando em http://localhost:${PORT}`);
-  console.log(`🔒 Painel admin em: http://localhost:${PORT}/${ADMIN_PATH}`);
-  console.log(`   Login: admin@cashpix.com / Admin@2024!\n`);
-});
+// For Vercel (serverless export)
+module.exports = app;
+
+// For local dev
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  initDb().then(() => {
+    app.listen(PORT, () => {
+      console.log(`\n🚀 CashPix rodando em http://localhost:${PORT}`);
+      console.log(`🔒 Painel admin em: http://localhost:${PORT}/${ADMIN_PATH}`);
+      console.log(`   Login: admin@cashpix.com / Admin@2024!\n`);
+    });
+  }).catch(err => {
+    console.error('[FATAL] Falha ao inicializar DB:', err);
+    process.exit(1);
+  });
+}
