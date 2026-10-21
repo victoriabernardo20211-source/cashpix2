@@ -29,7 +29,6 @@
     .metric-value.green { color: #16a34a; }
     .metric-value.yellow { color: #d97706; }
     .metric-value.blue { color: #2563eb; }
-    .metric-value.gray { color: #9ca3af; }
 
     .toolbar { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
     .filter-btn { padding: .5rem 1rem; border-radius: 8px; border: 1.5px solid #e5e7eb; background: #fff; font-size: .85rem; cursor: pointer; text-decoration: none; color: #374151; transition: all .15s; }
@@ -49,7 +48,6 @@
     .badge-novo { background: #dbeafe; color: #1d4ed8; }
     .badge-atendimento { background: #fef3c7; color: #92400e; }
     .badge-pago { background: #d1fae5; color: #065f46; }
-    .badge-incompleto { background: #f3f4f6; color: #6b7280; }
 
     .text-muted { color: #9ca3af; font-size: .8rem; }
     .btn { padding: .4rem .85rem; border-radius: 8px; font-size: .82rem; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; }
@@ -98,18 +96,15 @@
       <div class="metric-label">Pagos</div>
       <div class="metric-value green">{{pagos}}</div>
     </div>
-    <div class="metric-card">
-      <div class="metric-label">Incompletos</div>
-      <div class="metric-value gray">{{incompletos}}</div>
-    </div>
   </div>
 
   <div class="toolbar">
-    <a class="filter-btn" href="/{{admin_path}}/leads">Todos</a>
+    <a class="filter-btn {{filtro_ativo === 'todos' ? 'active' : ''}}" href="/{{admin_path}}/leads?status=todos" style="{{filtro_ativo}}">
+      Todos
+    </a>
     <a class="filter-btn" href="/{{admin_path}}/leads?status=novo">Novos</a>
     <a class="filter-btn" href="/{{admin_path}}/leads?status=em_atendimento">Em atendimento</a>
     <a class="filter-btn" href="/{{admin_path}}/leads?status=pago">Pagos</a>
-    <a class="filter-btn" href="/{{admin_path}}/leads?status=incompleto">⚠️ Incompletos</a>
     <a class="export-btn" href="/{{admin_path}}/leads/export.csv">⬇️ Exportar CSV</a>
   </div>
 
@@ -136,12 +131,12 @@
 </main>
 
 <script>
+// Highlight active filter button
 const params = new URLSearchParams(window.location.search);
 const filtro = params.get('status') || 'todos';
 document.querySelectorAll('.filter-btn').forEach(btn => {
   const url = new URL(btn.href, location.origin);
-  const btnFiltro = url.searchParams.get('status') || 'todos';
-  if (btnFiltro === filtro) btn.classList.add('active');
+  if ((url.searchParams.get('status') || 'todos') === filtro) btn.classList.add('active');
   else btn.classList.remove('active');
 });
 </script>
