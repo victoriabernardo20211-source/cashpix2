@@ -29,8 +29,13 @@
     .input-group input:focus, .input-group textarea:focus { border-color: #22c55e; }
     .input-group small { display: block; color: #9ca3af; font-size: .78rem; margin-top: .25rem; }
     .color-row { display: flex; align-items: center; gap: .75rem; }
-    .color-row input[type=color] { width: 48px; height: 38px; border-radius: 8px; border: 1.5px solid #e5e7eb; padding: 2px; cursor: pointer; }
+    .color-row input[type=color] { width: 48px; height: 38px; border-radius: 8px; border: 1.5px solid #e5e7eb; padding: 2px; cursor: pointer; flex-shrink: 0; }
     .color-row input[type=text] { flex: 1; }
+    .colors-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .75rem; }
+    .color-item label { display: block; font-size: .78rem; font-weight: 500; color: #6b7280; margin-bottom: .35rem; }
+    .color-item .color-row { flex-direction: column; align-items: stretch; gap: .35rem; }
+    .color-item .color-row input[type=color] { width: 100%; height: 44px; border-radius: 10px; }
+    .color-item .color-row input[type=text] { font-size: .8rem; padding: .45rem .6rem; }
     .actions { display: flex; gap: .75rem; margin-top: 1.5rem; border-top: 1px solid #f3f4f6; padding-top: 1.25rem; }
     .btn { padding: .7rem 1.4rem; border-radius: 10px; font-size: .9rem; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; }
     .btn:hover { opacity: .85; }
@@ -65,7 +70,35 @@
         <div class="section-title">Marca</div>
         <div class="input-group"><label>Nome da marca</label><input type="text" name="marca_nome" value="{{marca_nome}}" required></div>
         <div class="input-group"><label>Slogan</label><input type="text" name="marca_slogan" value="{{marca_slogan}}"></div>
-        <div class="input-group"><label>Cor principal</label><div class="color-row"><input type="color" id="cor-picker" value="{{cor_principal}}"><input type="text" name="cor_principal" id="cor-hex" value="{{cor_principal}}" placeholder="#22c55e"></div></div>
+
+        <div class="section-title">Cores</div>
+        <div class="colors-grid">
+          <div class="color-item">
+            <label>Cor principal</label>
+            <div class="color-row">
+              <input type="color" id="picker-principal" value="{{cor_principal}}">
+              <input type="text" name="cor_principal" id="hex-principal" value="{{cor_principal}}" placeholder="#22c55e">
+            </div>
+            <small style="margin-top:.3rem;color:#9ca3af;font-size:.72rem">Botões, bordas, destaques</small>
+          </div>
+          <div class="color-item">
+            <label>Fundo da página</label>
+            <div class="color-row">
+              <input type="color" id="picker-fundo" value="{{cor_fundo}}">
+              <input type="text" name="cor_fundo" id="hex-fundo" value="{{cor_fundo}}" placeholder="#faf9f5">
+            </div>
+            <small style="margin-top:.3rem;color:#9ca3af;font-size:.72rem">Cor de fundo do site</small>
+          </div>
+          <div class="color-item">
+            <label>Cor do texto</label>
+            <div class="color-row">
+              <input type="color" id="picker-texto" value="{{cor_texto}}">
+              <input type="text" name="cor_texto" id="hex-texto" value="{{cor_texto}}" placeholder="#1a1a1a">
+            </div>
+            <small style="margin-top:.3rem;color:#9ca3af;font-size:.72rem">Texto principal do site</small>
+          </div>
+        </div>
+
         <div class="section-title">Hero / Topo</div>
         <div class="input-group"><label>Título principal</label><input type="text" name="titulo_principal" value="{{titulo_principal}}"></div>
         <div class="input-group"><label>Subtítulo</label><input type="text" name="subtitulo" value="{{subtitulo}}"></div>
@@ -97,10 +130,15 @@
   </div>
 </main>
 <script>
-const picker = document.getElementById('cor-picker');
-const hexInput = document.getElementById('cor-hex');
-picker.addEventListener('input', () => { hexInput.value = picker.value; });
-hexInput.addEventListener('input', () => { if (/^#[0-9a-fA-F]{6}$/.test(hexInput.value)) picker.value = hexInput.value; });
+function bindColor(pickerId, hexId) {
+  const picker = document.getElementById(pickerId);
+  const hex = document.getElementById(hexId);
+  picker.addEventListener('input', () => { hex.value = picker.value; });
+  hex.addEventListener('input', () => { if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) picker.value = hex.value; });
+}
+bindColor('picker-principal', 'hex-principal');
+bindColor('picker-fundo', 'hex-fundo');
+bindColor('picker-texto', 'hex-texto');
 </script>
 </body>
 </html>

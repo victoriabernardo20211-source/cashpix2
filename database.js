@@ -68,7 +68,8 @@ async function initDb() {
 
     const defaults = {
       marca_nome: 'CashPix', marca_slogan: 'Resgate seu cashback em 5 passos',
-      cor_principal: '#22c55e', cashback_percent: '15', prazo_pagamento: '24h',
+      cor_principal: '#22c55e', cor_fundo: '#faf9f5', cor_texto: '#1a1a1a',
+      cashback_percent: '15', prazo_pagamento: '24h',
       mensagem_final: 'Tudo certo, {nome}! Seu cashback de R$ {valor} foi aprovado. Um consultor vai entrar em contato em breve.',
       whatsapp_consultor: '', botao_topo_texto: 'Resgatar cashback agora',
       titulo_principal: 'Você tem cashback acumulado esperando por você!',
@@ -97,6 +98,9 @@ async function getConfig() {
   const { rows } = await getPool().query('SELECT chave, valor FROM site_config');
   const config = {};
   for (const row of rows) config[row.chave] = row.valor;
+  // garante defaults para cores novas caso já existam registros antigos sem elas
+  if (!config.cor_fundo) config.cor_fundo = '#faf9f5';
+  if (!config.cor_texto) config.cor_texto = '#1a1a1a';
   return config;
 }
 

@@ -6,11 +6,11 @@
   <title>{{marca_nome}} — {{marca_slogan}}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --green: {{cor_principal}}; --bg: #faf9f5; }
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: #1a1a1a; min-height: 100vh; }
+    :root { --green: {{cor_principal}}; --bg: {{cor_fundo}}; --text: {{cor_texto}}; }
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
     header { background: #fff; border-bottom: 1px solid #e5e7eb; padding: .75rem 1rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
     .logo { font-size: 1.3rem; font-weight: 700; color: var(--green); }
-    .hero { background: linear-gradient(135deg, var(--green) 0%, #16a34a 100%); color: #fff; text-align: center; padding: 3rem 1rem 2rem; }
+    .hero { background: var(--green); color: #fff; text-align: center; padding: 3rem 1rem 2rem; }
     .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 700; max-width: 600px; margin: 0 auto .75rem; }
     .hero p { font-size: 1.05rem; opacity: .9; max-width: 480px; margin: 0 auto 1.5rem; }
     .btn-hero { display: inline-block; background: #fff; color: var(--green); font-size: 1rem; font-weight: 700; padding: .85rem 2rem; border-radius: 50px; cursor: pointer; border: none; box-shadow: 0 4px 16px rgba(0,0,0,.15); transition: transform .15s; }
@@ -75,7 +75,7 @@
       <div class="cashback-box" id="cashback-preview" style="display:none"><div class="cashback-label">Seu cashback estimado</div><div class="cashback-value" id="cashback-display">R$ 0,00</div></div>
       <button class="btn-primary" onclick="handleStep2()">Continuar →</button>
     </div>
-  </div>
+tml  </div>
   <div class="step" id="step-3">
     <div class="card">
       <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
