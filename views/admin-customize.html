@@ -17,10 +17,8 @@
     .logout-btn:hover { background: #1f2937; color: #fff; }
     .sidebar-footer { position: absolute; bottom: 1.5rem; left: 1rem; right: 1rem; }
     .admin-name { color: #6b7280; font-size: .78rem; padding: 0 .75rem; margin-bottom: .5rem; }
-
     .main { margin-left: 220px; padding: 2rem; min-height: 100vh; }
     .page-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; }
-
     .layout { display: grid; grid-template-columns: 420px 1fr; gap: 1.5rem; align-items: start; }
     .form-panel { background: #fff; border-radius: 14px; padding: 1.75rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
     .section-title { font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; margin: 1.25rem 0 .75rem; border-top: 1px solid #f3f4f6; padding-top: 1rem; }
@@ -30,31 +28,24 @@
     .input-group input, .input-group textarea { width: 100%; padding: .7rem .9rem; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: .9rem; outline: none; transition: border-color .15s; font-family: inherit; resize: vertical; }
     .input-group input:focus, .input-group textarea:focus { border-color: #22c55e; }
     .input-group small { display: block; color: #9ca3af; font-size: .78rem; margin-top: .25rem; }
-    .color-row { display: flex; align-items: center; gap: .75rem; }
-    .color-row input[type=color] { width: 48px; height: 38px; border-radius: 8px; border: 1.5px solid #e5e7eb; padding: 2px; cursor: pointer; }
-    .color-row input[type=text] { flex: 1; }
-
+    .colors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .color-item label { display: block; font-size: .82rem; font-weight: 600; color: #374151; margin-bottom: .4rem; }
+    .color-item small { display: block; font-size: .72rem; color: #9ca3af; margin-top: .3rem; }
+    .color-row { display: flex; align-items: center; gap: .5rem; }
+    .color-row input[type=color] { width: 44px; height: 44px; border-radius: 10px; border: 1.5px solid #e5e7eb; padding: 2px; cursor: pointer; flex-shrink: 0; }
+    .color-row input[type=text] { flex: 1; padding: .55rem .7rem; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: .85rem; outline: none; font-family: monospace; }
     .actions { display: flex; gap: .75rem; margin-top: 1.5rem; border-top: 1px solid #f3f4f6; padding-top: 1.25rem; }
     .btn { padding: .7rem 1.4rem; border-radius: 10px; font-size: .9rem; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; }
     .btn:hover { opacity: .85; }
     .btn-green { background: #22c55e; color: #fff; }
     .btn-outline { background: #fff; border: 1.5px solid #e5e7eb; color: #374151; }
-
     .preview-panel { position: sticky; top: 1.5rem; }
     .preview-label { font-size: .8rem; font-weight: 600; color: #6b7280; margin-bottom: .5rem; }
     .preview-frame { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
     .preview-frame iframe { width: 100%; height: 600px; border: none; display: block; }
-
     .alert-success { background: #d1fae5; color: #065f46; padding: .75rem 1rem; border-radius: 10px; font-size: .9rem; margin-bottom: 1.25rem; border: 1px solid #a7f3d0; }
-
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-      .preview-panel { display: none; }
-    }
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .main { margin-left: 0; padding: 1rem; }
-    }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .preview-panel { display: none; } }
+    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 1rem; } }
   </style>
 </head>
 <body>
@@ -65,127 +56,96 @@
   <a class="nav-link" href="/" target="_blank">🌐 Ver site público</a>
   <div class="sidebar-footer">
     <div class="admin-name">{{admin_nome}}</div>
-    <form method="POST" action="/{{admin_path}}/logout">
-      <button type="submit" class="logout-btn">🚪 Sair</button>
-    </form>
+    <form method="POST" action="/{{admin_path}}/logout"><button type="submit" class="logout-btn">🚪 Sair</button></form>
   </div>
 </nav>
-
 <main class="main">
   <div class="page-title">Personalizar site</div>
-
   <div class="layout">
     <div class="form-panel">
       {{msg}}
       <form method="POST" action="/{{admin_path}}/personalizar" id="config-form">
-
         <div class="section-title">Marca</div>
-        <div class="input-group">
-          <label>Nome da marca</label>
-          <input type="text" name="marca_nome" value="{{marca_nome}}" required>
-        </div>
-        <div class="input-group">
-          <label>Slogan</label>
-          <input type="text" name="marca_slogan" value="{{marca_slogan}}">
-        </div>
-        <div class="input-group">
-          <label>Cor principal</label>
-          <div class="color-row">
-            <input type="color" id="cor-picker" value="{{cor_principal}}">
-            <input type="text" name="cor_principal" id="cor-hex" value="{{cor_principal}}" placeholder="#22c55e">
+        <div class="input-group"><label>Nome da marca</label><input type="text" name="marca_nome" value="{{marca_nome}}" required></div>
+        <div class="input-group"><label>Slogan</label><input type="text" name="marca_slogan" value="{{marca_slogan}}"></div>
+
+        <div class="section-title">Cores</div>
+        <div class="colors-grid">
+          <div class="color-item">
+            <label>Cor principal</label>
+            <div class="color-row">
+              <input type="color" id="picker-principal" value="{{cor_principal}}">
+              <input type="text" name="cor_principal" id="hex-principal" value="{{cor_principal}}" placeholder="#254F9B">
+            </div>
+            <small>Cabeçalho, hero, bordas, progresso</small>
+          </div>
+          <div class="color-item">
+            <label>Cor dos botões</label>
+            <div class="color-row">
+              <input type="color" id="picker-botao" value="{{cor_botao}}">
+              <input type="text" name="cor_botao" id="hex-botao" value="{{cor_botao}}" placeholder="#C20016">
+            </div>
+            <small>Botão de ação e CTA</small>
+          </div>
+          <div class="color-item">
+            <label>Fundo da página</label>
+            <div class="color-row">
+              <input type="color" id="picker-fundo" value="{{cor_fundo}}">
+              <input type="text" name="cor_fundo" id="hex-fundo" value="{{cor_fundo}}" placeholder="#f5f7fa">
+            </div>
+            <small>Cor de fundo geral</small>
+          </div>
+          <div class="color-item">
+            <label>Cor do texto</label>
+            <div class="color-row">
+              <input type="color" id="picker-texto" value="{{cor_texto}}">
+              <input type="text" name="cor_texto" id="hex-texto" value="{{cor_texto}}" placeholder="#1a1a1a">
+            </div>
+            <small>Texto principal do site</small>
           </div>
         </div>
 
         <div class="section-title">Hero / Topo</div>
-        <div class="input-group">
-          <label>Título principal</label>
-          <input type="text" name="titulo_principal" value="{{titulo_principal}}">
-        </div>
-        <div class="input-group">
-          <label>Subtítulo</label>
-          <input type="text" name="subtitulo" value="{{subtitulo}}">
-        </div>
-        <div class="input-group">
-          <label>Texto do botão</label>
-          <input type="text" name="botao_topo_texto" value="{{botao_topo_texto}}">
-        </div>
-
+        <div class="input-group"><label>Título principal</label><input type="text" name="titulo_principal" value="{{titulo_principal}}"></div>
+        <div class="input-group"><label>Subtítulo</label><input type="text" name="subtitulo" value="{{subtitulo}}"></div>
+        <div class="input-group"><label>Texto do botão</label><input type="text" name="botao_topo_texto" value="{{botao_topo_texto}}"></div>
         <div class="section-title">Cashback</div>
-        <div class="input-group">
-          <label>Percentual de cashback (%)</label>
-          <input type="number" name="cashback_percent" value="{{cashback_percent}}" min="1" max="100">
-          <small>Ex: 15 = 15%</small>
-        </div>
-        <div class="input-group">
-          <label>Prazo de pagamento</label>
-          <input type="text" name="prazo_pagamento" value="{{prazo_pagamento}}" placeholder="Ex: 24h">
-        </div>
-
+        <div class="input-group"><label>Percentual de cashback (%)</label><input type="number" name="cashback_percent" value="{{cashback_percent}}" min="1" max="100"><small>Ex: 15 = 15%</small></div>
+        <div class="input-group"><label>Prazo de pagamento</label><input type="text" name="prazo_pagamento" value="{{prazo_pagamento}}" placeholder="Ex: 24h"></div>
         <div class="section-title">Passos do funil</div>
-        <div class="input-group">
-          <label>Passo 1 — Pergunta</label>
-          <input type="text" name="passo1_pergunta" value="{{passo1_pergunta}}">
-        </div>
-        <div class="input-group">
-          <label>Passo 2 — Pergunta</label>
-          <input type="text" name="passo2_pergunta" value="{{passo2_pergunta}}">
-        </div>
-        <div class="input-group">
-          <label>Passo 3 — Título</label>
-          <input type="text" name="passo3_titulo" value="{{passo3_titulo}}">
-        </div>
-        <div class="input-group">
-          <label>Passo 3 — Pergunta chave Pix</label>
-          <input type="text" name="passo3_pergunta" value="{{passo3_pergunta}}">
-        </div>
-        <div class="input-group">
-          <label>Passo 4 — Pergunta</label>
-          <input type="text" name="passo4_pergunta" value="{{passo4_pergunta}}">
-        </div>
-        <div class="input-group">
-          <label>Passo 5 — Pergunta</label>
-          <input type="text" name="passo5_pergunta" value="{{passo5_pergunta}}">
-        </div>
-
+        <div class="input-group"><label>Passo 1 — Pergunta</label><input type="text" name="passo1_pergunta" value="{{passo1_pergunta}}"></div>
+        <div class="input-group"><label>Passo 2 — Pergunta</label><input type="text" name="passo2_pergunta" value="{{passo2_pergunta}}"></div>
+        <div class="input-group"><label>Passo 3 — Título</label><input type="text" name="passo3_titulo" value="{{passo3_titulo}}"></div>
+        <div class="input-group"><label>Passo 3 — Pergunta chave Pix</label><input type="text" name="passo3_pergunta" value="{{passo3_pergunta}}"></div>
+        <div class="input-group"><label>Passo 4 — Pergunta</label><input type="text" name="passo4_pergunta" value="{{passo4_pergunta}}"></div>
+        <div class="input-group"><label>Passo 5 — Pergunta</label><input type="text" name="passo5_pergunta" value="{{passo5_pergunta}}"></div>
         <div class="section-title">Tela final</div>
-        <div class="input-group">
-          <label>Mensagem final</label>
-          <textarea name="mensagem_final" rows="3">{{mensagem_final}}</textarea>
-          <small>Use {nome} e {valor} como variáveis.</small>
-        </div>
-        <div class="input-group">
-          <label>WhatsApp do consultor</label>
-          <input type="text" name="whatsapp_consultor" value="{{whatsapp_consultor}}" placeholder="5511999999999">
-          <small>Número completo com código do país (ex: 5511999999999)</small>
-        </div>
-        <div class="input-group">
-          <label>Rodapé legal</label>
-          <input type="text" name="rodape_legal" value="{{rodape_legal}}">
-        </div>
-
+        <div class="input-group"><label>Mensagem final</label><textarea name="mensagem_final" rows="3">{{mensagem_final}}</textarea><small>Use {nome} e {valor} como variáveis.</small></div>
+        <div class="input-group"><label>WhatsApp do consultor</label><input type="text" name="whatsapp_consultor" value="{{whatsapp_consultor}}" placeholder="5511999999999"><small>Número completo com código do país</small></div>
+        <div class="input-group"><label>Rodapé legal</label><input type="text" name="rodape_legal" value="{{rodape_legal}}"></div>
         <div class="actions">
           <button type="button" class="btn btn-outline" onclick="location.href=location.href">Descartar</button>
           <button type="submit" class="btn btn-green">💾 Salvar e publicar</button>
         </div>
       </form>
     </div>
-
     <div class="preview-panel">
       <div class="preview-label">Prévia do site (atualiza após salvar)</div>
-      <div class="preview-frame">
-        <iframe src="/" id="preview-iframe" title="Site preview"></iframe>
-      </div>
+      <div class="preview-frame"><iframe src="/" id="preview-iframe" title="Site preview"></iframe></div>
     </div>
   </div>
 </main>
-
 <script>
-const picker = document.getElementById('cor-picker');
-const hexInput = document.getElementById('cor-hex');
-picker.addEventListener('input', () => { hexInput.value = picker.value; });
-hexInput.addEventListener('input', () => {
-  if (/^#[0-9a-fA-F]{6}$/.test(hexInput.value)) picker.value = hexInput.value;
-});
+function bindColor(pickerId, hexId) {
+  const picker = document.getElementById(pickerId);
+  const hex = document.getElementById(hexId);
+  picker.addEventListener('input', () => { hex.value = picker.value; });
+  hex.addEventListener('input', () => { if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) picker.value = hex.value; });
+}
+bindColor('picker-principal', 'hex-principal');
+bindColor('picker-botao', 'hex-botao');
+bindColor('picker-fundo', 'hex-fundo');
+bindColor('picker-texto', 'hex-texto');
 </script>
 </body>
 </html>
