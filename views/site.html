@@ -73,7 +73,7 @@
     <div class="hero-eyebrow">💳 Programa de Cashback</div>
     <h1>{{titulo_principal}}</h1>
     <div class="hero-cashback-pill">💰 Resgate até <strong>{{cashback_percent}}%</strong> da sua fatura</div>
-    <button class="btn-hero" onclick="startFunnel()">{{botao_topo_texto}} →</button>
+    <button class="btn-hero" id="btn-hero">{{botao_topo_texto}} →</button>
     <div class="hero-sub">🔒 100% seguro &nbsp;·&nbsp; ⚡ Recebe na hora</div>
   </div>
   <div class="proof-bar">
@@ -90,8 +90,8 @@
       <div class="progress"><div class="progress-dot done"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
       <div class="step-badge">Passo 1 de 5</div>
       <div class="step-question">{{passo1_pergunta}}</div>
-      <button class="btn-choice" onclick="handleStep1('sim')"><span class="btn-choice-icon">✅</span> Sim, possuo cartão</button>
-      <button class="btn-choice" onclick="handleStep1('nao')"><span class="btn-choice-icon">❌</span> Não possuo cartão</button>
+      <button class="btn-choice" id="btn-sim"><span class="btn-choice-icon">✅</span> Sim, possuo cartão</button>
+      <button class="btn-choice" id="btn-nao"><span class="btn-choice-icon">❌</span> Não possuo cartão</button>
       <div class="trust-bar">🔒 Seus dados estão seguros e protegidos</div>
     </div>
   </div>
@@ -111,7 +111,7 @@
         <div class="cashback-label">Seu cashback estimado 🎉</div>
         <div class="cashback-value" id="cashback-display">R$ 0,00</div>
       </div>
-      <button class="btn-primary" onclick="handleStep2()">Continuar →</button>
+      <button class="btn-primary" id="btn-step2">Continuar →</button>
     </div>
   </div>
 
@@ -126,17 +126,17 @@
       </div>
       <div class="step-question">{{passo3_pergunta}}</div>
       <div class="pix-options">
-        <div class="pix-opt" onclick="selectPix('cpf', event)"><span class="pix-icon">🪴</span>CPF</div>
-        <div class="pix-opt" onclick="selectPix('telefone', event)"><span class="pix-icon">📱</span>Telefone</div>
-        <div class="pix-opt" onclick="selectPix('email', event)"><span class="pix-icon">✉️</span>E-mail</div>
-        <div class="pix-opt" onclick="selectPix('aleatoria', event)"><span class="pix-icon">🔑</span>Aleatória</div>
+        <div class="pix-opt" id="pix-cpf"><span class="pix-icon">🪴</span>CPF</div>
+        <div class="pix-opt" id="pix-telefone"><span class="pix-icon">📱</span>Telefone</div>
+        <div class="pix-opt" id="pix-email"><span class="pix-icon">✉️</span>E-mail</div>
+        <div class="pix-opt" id="pix-aleatoria"><span class="pix-icon">🔑</span>Aleatória</div>
       </div>
       <div class="input-group pix-key-group" id="pix-key-group" style="display:none">
         <label id="pix-key-label">Informe sua chave Pix</label>
         <input type="text" id="pix-key-input" placeholder="">
         <span class="error-msg" id="pix-key-error">Informe a chave Pix corretamente.</span>
       </div>
-      <button class="btn-primary" id="btn-step3" onclick="handleStep3()" disabled>Continuar →</button>
+      <button class="btn-primary" id="btn-step3" disabled>Continuar →</button>
     </div>
   </div>
 
@@ -151,7 +151,7 @@
         <input type="tel" id="tel-input" placeholder="(11) 91234-5678" inputmode="tel">
         <span class="error-msg" id="tel-error">Por favor, informe um telefone válido.</span>
       </div>
-      <button class="btn-primary" onclick="handleStep4()">Continuar →</button>
+      <button class="btn-primary" id="btn-step4">Continuar →</button>
       <div class="trust-bar">🔒 Usamos seu telefone apenas para enviar o cashback</div>
     </div>
   </div>
@@ -172,7 +172,7 @@
         <input type="text" id="nome-input" placeholder="Seu nome completo">
         <span class="error-msg" id="nome-error">Informe seu nome completo.</span>
       </div>
-      <button class="btn-primary" id="btn-submit" onclick="handleSubmit()">🎉 Liberar meu cashback</button>
+      <button class="btn-primary" id="btn-submit">🎉 Liberar meu cashback</button>
       <div class="trust-bar">🔒 Criptografado &nbsp;·&nbsp; 🛡️ 100% seguro</div>
     </div>
   </div>
@@ -192,62 +192,66 @@
 
 <footer>{{rodape_legal}}</footer>
 <script>
-const CASHBACK_PCT = {{cashback_percent}} / 100;
-const MSG_FINAL = `{{mensagem_final}}`;
-const PRAZO = `{{prazo_pagamento}}`;
-let data = { fatura: 0, cashback: 0, tipo_chave: '', chave_pix: '', telefone: '', cpf: '', nome: '', leadId: null };
+var CASHBACK_PCT = parseFloat("{{cashback_percent}}") / 100;
+var MSG_FINAL = {{mensagem_final_json}};
+var PRAZO = {{prazo_pagamento_json}};
+var data = { fatura: 0, cashback: 0, tipo_chave: '', chave_pix: '', telefone: '', cpf: '', nome: '', leadId: null };
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('step-' + n).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 function startFunnel() {
   document.getElementById('hero-section').style.display = 'none';
   document.getElementById('funnel').style.display = 'block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-function showStep(n) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step-' + n).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-function handleStep1(choice) {
-  if (choice === 'nao') {
-    showStep('success');
-    document.getElementById('success-title').textContent = 'Que pena! 😕';
-    document.getElementById('success-msg').textContent = 'O serviço de cashback é exclusivo para portadores de cartão de crédito.';
-    document.getElementById('success-badge').textContent = '';
-    return;
-  }
+
+document.getElementById('btn-hero').addEventListener('click', startFunnel);
+
+document.getElementById('btn-sim').addEventListener('click', function() {
   showStep(2);
-}
-const faturaInput = document.getElementById('fatura-input');
-faturaInput.addEventListener('input', () => {
-  let raw = faturaInput.value.replace(/\D/g, '');
+});
+
+document.getElementById('btn-nao').addEventListener('click', function() {
+  showStep('success');
+  document.getElementById('success-title').textContent = 'Que pena! 😕';
+  document.getElementById('success-msg').textContent = 'O serviço de cashback é exclusivo para portadores de cartão de crédito.';
+  document.getElementById('success-badge').textContent = '';
+});
+
+var faturaInput = document.getElementById('fatura-input');
+faturaInput.addEventListener('input', function() {
+  var raw = faturaInput.value.replace(/\D/g, '');
   if (!raw) { document.getElementById('cashback-preview').style.display = 'none'; return; }
-  const val = parseInt(raw, 10) / 100;
+  var val = parseInt(raw, 10) / 100;
   faturaInput.value = 'R$ ' + val.toFixed(2).replace('.', ',');
-  const cb = val * CASHBACK_PCT;
+  var cb = val * CASHBACK_PCT;
   document.getElementById('cashback-display').textContent = 'R$ ' + cb.toFixed(2).replace('.', ',');
   document.getElementById('cashback-preview').style.display = 'block';
 });
-function handleStep2() {
-  const raw = faturaInput.value.replace(/[^\d,]/g, '').replace(',', '.');
-  const val = parseFloat(raw);
+
+document.getElementById('btn-step2').addEventListener('click', function() {
+  var raw = faturaInput.value.replace(/[^\d,]/g, '').replace(',', '.');
+  var val = parseFloat(raw);
   if (!val || val < 10) { document.getElementById('fatura-error').classList.add('visible'); return; }
   document.getElementById('fatura-error').classList.remove('visible');
   data.fatura = val;
   data.cashback = Math.round(val * CASHBACK_PCT * 100) / 100;
   document.getElementById('cashback-confirm').textContent = 'R$ ' + data.cashback.toFixed(2).replace('.', ',');
   showStep(3);
-}
+});
 
-function selectPix(tipo, evt) {
-  document.querySelectorAll('.pix-opt').forEach(el => el.classList.remove('selected'));
-  if (evt && evt.currentTarget) evt.currentTarget.classList.add('selected');
+function selectPix(tipo) {
+  document.querySelectorAll('.pix-opt').forEach(function(el) { el.classList.remove('selected'); });
+  document.getElementById('pix-' + tipo).classList.add('selected');
   data.tipo_chave = tipo;
   data.chave_pix = '';
-
-  const group = document.getElementById('pix-key-group');
-  const label = document.getElementById('pix-key-label');
-  const input = document.getElementById('pix-key-input');
-
+  var group = document.getElementById('pix-key-group');
+  var label = document.getElementById('pix-key-label');
+  var input = document.getElementById('pix-key-input');
   if (tipo === 'email') {
     group.style.display = 'flex';
     label.textContent = '✉️ Informe seu e-mail';
@@ -267,58 +271,60 @@ function selectPix(tipo, evt) {
   document.getElementById('btn-step3').disabled = false;
 }
 
-function handleStep3() {
+['cpf','telefone','email','aleatoria'].forEach(function(tipo) {
+  document.getElementById('pix-' + tipo).addEventListener('click', function() { selectPix(tipo); });
+});
+
+document.getElementById('btn-step3').addEventListener('click', function() {
   if (!data.tipo_chave) return;
   if (data.tipo_chave === 'email' || data.tipo_chave === 'aleatoria') {
-    const val = document.getElementById('pix-key-input').value.trim();
+    var val = document.getElementById('pix-key-input').value.trim();
     if (!val) { document.getElementById('pix-key-error').classList.add('visible'); return; }
     document.getElementById('pix-key-error').classList.remove('visible');
     data.chave_pix = val;
   }
   showStep(4);
-}
+});
 
-const telInput = document.getElementById('tel-input');
-telInput.addEventListener('input', () => {
-  let raw = telInput.value.replace(/\D/g, '').slice(0, 11);
+var telInput = document.getElementById('tel-input');
+telInput.addEventListener('input', function() {
+  var raw = telInput.value.replace(/\D/g, '').slice(0, 11);
   if (raw.length > 6) raw = raw.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
   else if (raw.length > 2) raw = raw.replace(/(\d{2})(\d{0,5})/, '($1) $2');
   telInput.value = raw;
 });
 
-async function handleStep4() {
-  const raw = telInput.value.replace(/\D/g, '');
+document.getElementById('btn-step4').addEventListener('click', async function() {
+  var raw = telInput.value.replace(/\D/g, '');
   if (raw.length < 10) { document.getElementById('tel-error').classList.add('visible'); return; }
   document.getElementById('tel-error').classList.remove('visible');
   data.telefone = raw;
   if (data.tipo_chave === 'telefone') data.chave_pix = raw;
-
   try {
-    const resp = await fetch('/api/lead/parcial', {
+    var resp = await fetch('/api/lead/parcial', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ telefone: data.telefone, fatura: data.fatura, cashback: data.cashback, tipo_chave: data.tipo_chave, chave_pix: data.chave_pix })
     });
-    const json = await resp.json();
+    var json = await resp.json();
     if (json.ok) data.leadId = json.id;
-  } catch (e) { /* ignora erro silencioso */ }
-
+  } catch (e) {}
   showStep(5);
-}
+});
 
-const cpfInput = document.getElementById('cpf-input');
-cpfInput.addEventListener('input', () => {
-  let raw = cpfInput.value.replace(/\D/g, '').slice(0, 11);
+var cpfInput = document.getElementById('cpf-input');
+cpfInput.addEventListener('input', function() {
+  var raw = cpfInput.value.replace(/\D/g, '').slice(0, 11);
   if (raw.length > 9) raw = raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
   else if (raw.length > 6) raw = raw.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
   else if (raw.length > 3) raw = raw.replace(/(\d{3})(\d{0,3})/, '$1.$2');
   cpfInput.value = raw;
 });
 
-async function handleSubmit() {
-  const cpfRaw = cpfInput.value.replace(/\D/g, '');
-  const nome = document.getElementById('nome-input').value.trim();
-  let ok = true;
+document.getElementById('btn-submit').addEventListener('click', async function() {
+  var cpfRaw = cpfInput.value.replace(/\D/g, '');
+  var nome = document.getElementById('nome-input').value.trim();
+  var ok = true;
   if (cpfRaw.length !== 11) { document.getElementById('cpf-error').classList.add('visible'); ok = false; }
   else document.getElementById('cpf-error').classList.remove('visible');
   if (nome.length < 4) { document.getElementById('nome-error').classList.add('visible'); ok = false; }
@@ -327,44 +333,42 @@ async function handleSubmit() {
   data.cpf = cpfRaw;
   data.nome = nome;
   if (data.tipo_chave === 'cpf') data.chave_pix = cpfRaw;
-
-  const btn = document.getElementById('btn-submit');
+  var btn = document.getElementById('btn-submit');
   btn.disabled = true; btn.textContent = 'Aguarde...';
-
   try {
-    let json;
+    var json;
     if (data.leadId) {
-      const resp = await fetch(`/api/lead/${data.leadId}/completar`, {
+      var resp = await fetch('/api/lead/' + data.leadId + '/completar', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, cpf: cpfRaw })
+        body: JSON.stringify({ nome: nome, cpf: cpfRaw })
       });
       json = await resp.json();
     } else {
-      const resp = await fetch('/api/lead', {
+      var resp2 = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      json = await resp.json();
+      json = await resp2.json();
     }
     if (json.ok) {
-      const firstName = nome.split(' ')[0];
-      const cbStr = 'R$ ' + data.cashback.toFixed(2).replace('.', ',');
-      const msg = MSG_FINAL.replace('{nome}', firstName).replace('{valor}', cbStr);
-      document.getElementById('success-title').textContent = `Tudo certo, ${firstName}! 🎉`;
-      document.getElementById('success-msg').innerHTML = msg + `<br><br><strong>Prazo: ${PRAZO}</strong>`;
+      var firstName = nome.split(' ')[0];
+      var cbStr = 'R$ ' + data.cashback.toFixed(2).replace('.', ',');
+      var msg = MSG_FINAL.replace('{nome}', firstName).replace('{valor}', cbStr);
+      document.getElementById('success-title').textContent = 'Tudo certo, ' + firstName + '! 🎉';
+      document.getElementById('success-msg').innerHTML = msg + '<br><br><strong>Prazo: ' + PRAZO + '</strong>';
       document.getElementById('success-badge').textContent = cbStr + ' aprovados';
       showStep('success');
     } else {
-      btn.disabled = false; btn.innerHTML = '🎉 Liberar meu cashback';
+      btn.disabled = false; btn.textContent = '🎉 Liberar meu cashback';
       alert('Erro: ' + (json.erro || 'Tente novamente.'));
     }
   } catch (e) {
-    btn.disabled = false; btn.innerHTML = '🎉 Liberar meu cashback';
+    btn.disabled = false; btn.textContent = '🎉 Liberar meu cashback';
     alert('Erro de conexão. Tente novamente.');
   }
-}
+});
 </script>
 </body>
 </html>

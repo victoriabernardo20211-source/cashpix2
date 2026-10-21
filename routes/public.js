@@ -6,8 +6,13 @@ const path = require('path');
 
 function renderSite(config) {
   let html = fs.readFileSync(path.join(__dirname, '../views/site.html'), 'utf8');
+  // Add JSON-safe versions of string values for use in JS contexts
+  const fullConfig = Object.assign({}, config);
   for (const [k, v] of Object.entries(config)) {
-    html = html.replace(new RegExp(`{{${k}}}`, 'g'), v || '');
+    fullConfig[k + '_json'] = JSON.stringify(v || '');
+  }
+  for (const [k, v] of Object.entries(fullConfig)) {
+    html = html.replace(new RegExp('\\{\\{' + k + '\\}\\}', 'g'), v != null ? v : '');
   }
   return html;
 }
