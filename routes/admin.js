@@ -60,9 +60,10 @@ function makeAdminRouter(adminPath) {
         novo: '<span class="badge badge-novo">Novo</span>',
         em_atendimento: '<span class="badge badge-atendimento">Em atendimento</span>',
         pago: '<span class="badge badge-pago">Pago</span>',
+        incompleto: '<span class="badge badge-incompleto">⚠️ Incompleto</span>',
       }[l.status] || l.status;
 
-      const acoes = l.status === 'novo'
+      const acoes = (l.status === 'novo' || l.status === 'incompleto')
         ? `<form method="POST" action="/${adminPath}/leads/${l.id}/status" style="display:inline">
              <input type="hidden" name="status" value="em_atendimento">
              <button class="btn btn-sm btn-yellow" type="submit">Em atendimento</button>
@@ -74,9 +75,12 @@ function makeAdminRouter(adminPath) {
            </form>`
         : '<span class="text-muted">—</span>';
 
+      const nomeDisplay = l.status === 'incompleto' ? '<em style="color:#9ca3af">— aguardando</em>' : escHtml(l.nome);
+      const cpfDisplay = l.status === 'incompleto' ? '<span class="text-muted">—</span>' : fmtCpf(l.cpf);
+
       return `<tr>
-        <td>${escHtml(l.nome)}</td>
-        <td>${fmtCpf(l.cpf)}</td>
+        <td>${nomeDisplay}</td>
+        <td>${cpfDisplay}</td>
         <td>${fmtTel(l.telefone)}</td>
         <td>${escHtml(l.chave_pix)}<br><small class="text-muted">${escHtml(l.tipo_chave)}</small></td>
         <td>R$ ${Number(l.fatura).toFixed(2).replace('.', ',')}</td>
@@ -119,19 +123,16 @@ function makeAdminRouter(adminPath) {
 
   const auth = requireAuth(adminPath);
 
-  // Root redirect
   router.get('/', (req, res) => {
     const token = req.cookies && req.cookies[COOKIE_NAME];
     if (token && verifyToken(token)) return res.redirect(`/${adminPath}/leads`);
     return res.redirect(`/${adminPath}/login`);
   });
 
-  // Login GET
   router.get('/login', (req, res) => {
     res.send(renderLogin(adminPath, ''));
   });
 
-  // Login POST
   router.post('/login', loginLimiter, express.urlencoded({ extended: false }), async (req, res) => {
     try {
       await initDb();
@@ -141,15 +142,11 @@ function makeAdminRouter(adminPath) {
         [String(email || '').toLowerCase().trim()]
       );
       const admin = rows[0];
-
-      // Always compare to prevent timing attacks
       const hash = admin ? admin.senha_hash : '$2a$12$invalidhashinvalidhashinvalidhash00';
       const ok = await bcrypt.compare(String(senha || ''), hash);
-
       if (!admin || !ok) {
         return res.status(401).send(renderLogin(adminPath, 'Credenciais inválidas.'));
       }
-
       const token = signToken({ id: admin.id, nome: admin.nome, email: admin.email, role: admin.role });
       res.cookie(COOKIE_NAME, token, setCookieOptions(req));
       res.redirect(`/${adminPath}/leads`);
@@ -159,13 +156,11 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Logout
   router.post('/logout', (req, res) => {
     res.clearCookie(COOKIE_NAME, { path: '/' });
     res.redirect(`/${adminPath}/login`);
   });
 
-  // Leads list
   router.get('/leads', auth, async (req, res) => {
     try {
       await initDb();
@@ -187,7 +182,6 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Update lead status
   router.post('/leads/:id/status', auth, express.urlencoded({ extended: false }), async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
@@ -205,7 +199,6 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Export CSV
   router.get('/leads/export.csv', auth, async (req, res) => {
     try {
       const { rows: leads } = await getPool().query('SELECT * FROM leads ORDER BY created_at DESC');
@@ -224,7 +217,6 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Customize GET
   router.get('/personalizar', auth, async (req, res) => {
     try {
       await initDb();
@@ -236,11 +228,11 @@ function makeAdminRouter(adminPath) {
     }
   });
 
-  // Customize POST
   router.post('/personalizar', auth, express.urlencoded({ extended: false }), async (req, res) => {
     try {
       const allowed = [
-        'marca_nome', 'marca_slogan', 'cor_principal', 'cashback_percent', 'prazo_pagamento',
+        'marca_nome', 'marca_slogan', 'cor_principal', 'cor_botao', 'cor_fundo', 'cor_texto',
+        'cashback_percent', 'prazo_pagamento',
         'mensagem_final', 'whatsapp_consultor', 'botao_topo_texto', 'titulo_principal', 'subtitulo',
         'passo1_pergunta', 'passo2_pergunta', 'passo3_titulo', 'passo3_pergunta',
         'passo4_pergunta', 'passo5_pergunta', 'rodape_legal',

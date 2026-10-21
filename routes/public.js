@@ -27,41 +27,72 @@ router.post('/api/lead', express.json(), async (req, res) => {
   try {
     await initDb();
     const { nome, cpf, telefone, chave_pix, tipo_chave, fatura } = req.body || {};
-
     if (!nome || !cpf || !telefone || !chave_pix || !tipo_chave || !fatura) {
       return res.status(400).json({ ok: false, erro: 'Dados incompletos.' });
     }
-
     const faturaNum = parseFloat(String(fatura).replace(',', '.'));
     if (isNaN(faturaNum) || faturaNum <= 0) {
       return res.status(400).json({ ok: false, erro: 'Fatura inválida.' });
     }
-
     const config = await getConfig();
     const pct = parseFloat(config.cashback_percent || '15') / 100;
     const cashback = Math.round(faturaNum * pct * 100) / 100;
-
     const cpfClean = String(cpf).replace(/\D/g, '').slice(0, 11);
     const telClean = String(telefone).replace(/\D/g, '').slice(0, 11);
-
+    const userAgent = (req.headers['user-agent'] || '').slice(0, 500);
     await getPool().query(
-      `INSERT INTO leads (nome, cpf, telefone, chave_pix, tipo_chave, fatura, cashback)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [
-        String(nome).slice(0, 120),
-        cpfClean,
-        telClean,
-        String(chave_pix).slice(0, 100),
-        String(tipo_chave).slice(0, 20),
-        faturaNum,
-        cashback,
-      ]
+      `INSERT INTO leads (nome, cpf, telefone, chave_pix, tipo_chave, fatura, cashback, status, user_agent)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'novo', $8)`,
+      [String(nome).slice(0, 120), cpfClean, telClean,
+       String(chave_pix).slice(0, 100), String(tipo_chave).slice(0, 20),
+       faturaNum, cashback, userAgent]
     );
-
     res.json({ ok: true, cashback });
   } catch (err) {
     console.error('[POST /api/lead]', err);
     res.status(500).json({ ok: false, erro: 'Erro ao salvar. Tente novamente.' });
+  }
+});
+
+router.post('/api/lead/parcial', express.json(), async (req, res) => {
+  try {
+    await initDb();
+    const { telefone, fatura, cashback, tipo_chave, chave_pix } = req.body || {};
+    if (!telefone || !fatura) return res.status(400).json({ ok: false });
+    const telClean = String(telefone).replace(/\D/g, '').slice(0, 11);
+    const faturaNum = parseFloat(String(fatura));
+    const cashbackNum = parseFloat(String(cashback || 0));
+    const userAgent = (req.headers['user-agent'] || '').slice(0, 500);
+    const { rows } = await getPool().query(
+      `INSERT INTO leads (nome, cpf, telefone, chave_pix, tipo_chave, fatura, cashback, status, user_agent)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'incompleto', $8) RETURNING id`,
+      ['—', '00000000000', telClean,
+       String(chave_pix || tipo_chave || '').slice(0, 100),
+       String(tipo_chave || '').slice(0, 20),
+       faturaNum, cashbackNum, userAgent]
+    );
+    res.json({ ok: true, id: rows[0].id });
+  } catch (err) {
+    console.error('[POST /api/lead/parcial]', err);
+    res.status(500).json({ ok: false });
+  }
+});
+
+router.patch('/api/lead/:id/completar', express.json(), async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { nome, cpf } = req.body || {};
+    if (!nome || !cpf || isNaN(id)) return res.status(400).json({ ok: false, erro: 'Dados inválidos.' });
+    const cpfClean = String(cpf).replace(/\D/g, '').slice(0, 11);
+    const { rowCount } = await getPool().query(
+      `UPDATE leads SET nome = $1, cpf = $2, status = 'novo' WHERE id = $3 AND status = 'incompleto'`,
+      [String(nome).slice(0, 120), cpfClean, id]
+    );
+    if (rowCount === 0) return res.status(404).json({ ok: false, erro: 'Lead não encontrado.' });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[PATCH /api/lead/:id/completar]', err);
+    res.status(500).json({ ok: false, erro: 'Erro ao completar.' });
   }
 });
 
