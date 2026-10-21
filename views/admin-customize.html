@@ -28,14 +28,12 @@
     .input-group input, .input-group textarea { width: 100%; padding: .7rem .9rem; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: .9rem; outline: none; transition: border-color .15s; font-family: inherit; resize: vertical; }
     .input-group input:focus, .input-group textarea:focus { border-color: #22c55e; }
     .input-group small { display: block; color: #9ca3af; font-size: .78rem; margin-top: .25rem; }
-    .color-row { display: flex; align-items: center; gap: .75rem; }
-    .color-row input[type=color] { width: 48px; height: 38px; border-radius: 8px; border: 1.5px solid #e5e7eb; padding: 2px; cursor: pointer; flex-shrink: 0; }
-    .color-row input[type=text] { flex: 1; }
-    .colors-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .75rem; }
-    .color-item label { display: block; font-size: .78rem; font-weight: 500; color: #6b7280; margin-bottom: .35rem; }
-    .color-item .color-row { flex-direction: column; align-items: stretch; gap: .35rem; }
-    .color-item .color-row input[type=color] { width: 100%; height: 44px; border-radius: 10px; }
-    .color-item .color-row input[type=text] { font-size: .8rem; padding: .45rem .6rem; }
+    .colors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .color-item label { display: block; font-size: .82rem; font-weight: 600; color: #374151; margin-bottom: .4rem; }
+    .color-item small { display: block; font-size: .72rem; color: #9ca3af; margin-top: .3rem; }
+    .color-row { display: flex; align-items: center; gap: .5rem; }
+    .color-row input[type=color] { width: 44px; height: 44px; border-radius: 10px; border: 1.5px solid #e5e7eb; padding: 2px; cursor: pointer; flex-shrink: 0; }
+    .color-row input[type=text] { flex: 1; padding: .55rem .7rem; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: .85rem; outline: none; font-family: monospace; }
     .actions { display: flex; gap: .75rem; margin-top: 1.5rem; border-top: 1px solid #f3f4f6; padding-top: 1.25rem; }
     .btn { padding: .7rem 1.4rem; border-radius: 10px; font-size: .9rem; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; }
     .btn:hover { opacity: .85; }
@@ -77,17 +75,25 @@
             <label>Cor principal</label>
             <div class="color-row">
               <input type="color" id="picker-principal" value="{{cor_principal}}">
-              <input type="text" name="cor_principal" id="hex-principal" value="{{cor_principal}}" placeholder="#22c55e">
+              <input type="text" name="cor_principal" id="hex-principal" value="{{cor_principal}}" placeholder="#254F9B">
             </div>
-            <small style="margin-top:.3rem;color:#9ca3af;font-size:.72rem">Botões, bordas, destaques</small>
+            <small>Cabeçalho, hero, bordas, progresso</small>
+          </div>
+          <div class="color-item">
+            <label>Cor dos botões</label>
+            <div class="color-row">
+              <input type="color" id="picker-botao" value="{{cor_botao}}">
+              <input type="text" name="cor_botao" id="hex-botao" value="{{cor_botao}}" placeholder="#C20016">
+            </div>
+            <small>Botão de ação e CTA</small>
           </div>
           <div class="color-item">
             <label>Fundo da página</label>
             <div class="color-row">
               <input type="color" id="picker-fundo" value="{{cor_fundo}}">
-              <input type="text" name="cor_fundo" id="hex-fundo" value="{{cor_fundo}}" placeholder="#faf9f5">
+              <input type="text" name="cor_fundo" id="hex-fundo" value="{{cor_fundo}}" placeholder="#f5f7fa">
             </div>
-            <small style="margin-top:.3rem;color:#9ca3af;font-size:.72rem">Cor de fundo do site</small>
+            <small>Cor de fundo geral</small>
           </div>
           <div class="color-item">
             <label>Cor do texto</label>
@@ -95,7 +101,7 @@
               <input type="color" id="picker-texto" value="{{cor_texto}}">
               <input type="text" name="cor_texto" id="hex-texto" value="{{cor_texto}}" placeholder="#1a1a1a">
             </div>
-            <small style="margin-top:.3rem;color:#9ca3af;font-size:.72rem">Texto principal do site</small>
+            <small>Texto principal do site</small>
           </div>
         </div>
 
@@ -137,6 +143,7 @@ function bindColor(pickerId, hexId) {
   hex.addEventListener('input', () => { if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) picker.value = hex.value; });
 }
 bindColor('picker-principal', 'hex-principal');
+bindColor('picker-botao', 'hex-botao');
 bindColor('picker-fundo', 'hex-fundo');
 bindColor('picker-texto', 'hex-texto');
 </script>

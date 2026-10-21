@@ -6,15 +6,15 @@
   <title>{{marca_nome}} — {{marca_slogan}}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --green: {{cor_principal}}; --bg: {{cor_fundo}}; --text: {{cor_texto}}; }
+    :root { --primary: {{cor_principal}}; --btn: {{cor_botao}}; --bg: {{cor_fundo}}; --text: {{cor_texto}}; }
     body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    header { background: #fff; border-bottom: 1px solid #e5e7eb; padding: .75rem 1rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
-    .logo { font-size: 1.3rem; font-weight: 700; color: var(--green); }
-    .hero { background: var(--green); color: #fff; text-align: center; padding: 3rem 1rem 2rem; }
+    header { background: #fff; border-bottom: 3px solid var(--primary); padding: .75rem 1rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+    .hero { background: var(--primary); color: #fff; text-align: center; padding: 3rem 1rem 2rem; }
     .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 700; max-width: 600px; margin: 0 auto .75rem; }
     .hero p { font-size: 1.05rem; opacity: .9; max-width: 480px; margin: 0 auto 1.5rem; }
-    .btn-hero { display: inline-block; background: #fff; color: var(--green); font-size: 1rem; font-weight: 700; padding: .85rem 2rem; border-radius: 50px; cursor: pointer; border: none; box-shadow: 0 4px 16px rgba(0,0,0,.15); transition: transform .15s; }
-    .btn-hero:hover { transform: scale(1.04); }
+    .btn-hero { display: inline-block; background: var(--btn); color: #fff; font-size: 1rem; font-weight: 700; padding: .85rem 2rem; border-radius: 50px; cursor: pointer; border: none; box-shadow: 0 4px 16px rgba(0,0,0,.25); transition: transform .15s, opacity .15s; }
+    .btn-hero:hover { transform: scale(1.04); opacity: .92; }
     .funnel { max-width: 520px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     .step { display: none; }
     .step.active { display: block; animation: fadeIn .3s ease; }
@@ -23,27 +23,27 @@
     .step-label { font-size: .78rem; font-weight: 600; letter-spacing: .06em; color: #9ca3af; text-transform: uppercase; margin-bottom: .5rem; }
     .step-question { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.25rem; color: #111; }
     .btn-choice { display: block; width: 100%; padding: .9rem 1.25rem; border: 2px solid #e5e7eb; border-radius: 12px; background: #fff; font-size: 1rem; font-weight: 500; cursor: pointer; margin-bottom: .75rem; text-align: left; transition: all .15s; }
-    .btn-choice:hover { border-color: var(--green); color: var(--green); }
+    .btn-choice:hover { border-color: var(--primary); color: var(--primary); }
     .input-group { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
     .input-group label { font-size: .9rem; font-weight: 500; color: #374151; }
     .input-group input { padding: .8rem 1rem; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem; outline: none; transition: border-color .15s; }
-    .input-group input:focus { border-color: var(--green); }
-    .cashback-box { background: #f0fdf4; border: 2px solid var(--green); border-radius: 12px; text-align: center; padding: 1.25rem; margin-bottom: 1.25rem; }
-    .cashback-label { font-size: .85rem; color: #16a34a; font-weight: 500; }
-    .cashback-value { font-size: 2.2rem; font-weight: 800; color: var(--green); }
-    .btn-primary { display: block; width: 100%; padding: .9rem; background: var(--green); color: #fff; font-size: 1rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; margin-top: .75rem; transition: opacity .15s; }
+    .input-group input:focus { border-color: var(--primary); }
+    .cashback-box { background: #eef2fb; border: 2px solid var(--primary); border-radius: 12px; text-align: center; padding: 1.25rem; margin-bottom: 1.25rem; }
+    .cashback-label { font-size: .85rem; color: var(--primary); font-weight: 500; }
+    .cashback-value { font-size: 2.2rem; font-weight: 800; color: var(--primary); }
+    .btn-primary { display: block; width: 100%; padding: .9rem; background: var(--btn); color: #fff; font-size: 1rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; margin-top: .75rem; transition: opacity .15s; }
     .btn-primary:hover { opacity: .9; }
     .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
     .progress { display: flex; gap: 4px; margin-bottom: 1.25rem; }
     .progress-dot { flex: 1; height: 4px; background: #e5e7eb; border-radius: 2px; transition: background .3s; }
-    .progress-dot.done { background: var(--green); }
+    .progress-dot.done { background: var(--primary); }
     .pix-options { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1rem; }
     .pix-opt { padding: .85rem; border: 2px solid #e5e7eb; border-radius: 12px; text-align: center; cursor: pointer; font-size: .92rem; font-weight: 500; background: #fff; transition: all .15s; }
-    .pix-opt:hover, .pix-opt.selected { border-color: var(--green); background: #f0fdf4; color: var(--green); }
+    .pix-opt:hover, .pix-opt.selected { border-color: var(--primary); background: #eef2fb; color: var(--primary); }
     .success-icon { font-size: 3.5rem; text-align: center; margin-bottom: .75rem; }
     .success-title { font-size: 1.4rem; font-weight: 700; text-align: center; margin-bottom: .5rem; }
     .success-msg { text-align: center; color: #6b7280; margin-bottom: 1.5rem; font-size: .95rem; line-height: 1.5; }
-    .success-badge { display: inline-block; background: #f0fdf4; color: var(--green); padding: .5rem 1.25rem; border-radius: 50px; font-weight: 700; font-size: 1.1rem; border: 1.5px solid var(--green); }
+    .success-badge { display: inline-block; background: #eef2fb; color: var(--primary); padding: .5rem 1.25rem; border-radius: 50px; font-weight: 700; font-size: 1.1rem; border: 1.5px solid var(--primary); }
     footer { text-align: center; padding: 1.5rem 1rem; color: #9ca3af; font-size: .8rem; }
     .error-msg { color: #ef4444; font-size: .85rem; margin-top: .4rem; display: none; }
     .error-msg.visible { display: block; }
@@ -75,7 +75,7 @@
       <div class="cashback-box" id="cashback-preview" style="display:none"><div class="cashback-label">Seu cashback estimado</div><div class="cashback-value" id="cashback-display">R$ 0,00</div></div>
       <button class="btn-primary" onclick="handleStep2()">Continuar →</button>
     </div>
-tml  </div>
+  </div>
   <div class="step" id="step-3">
     <div class="card">
       <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>

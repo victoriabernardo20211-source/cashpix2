@@ -224,7 +224,7 @@ function makeAdminRouter(adminPath) {
 
   router.post('/personalizar', auth, express.urlencoded({ extended: false }), async (req, res) => {
     try {
-      const allowed = ['marca_nome','marca_slogan','cor_principal','cor_fundo','cor_texto',
+      const allowed = ['marca_nome','marca_slogan','cor_principal','cor_botao','cor_fundo','cor_texto',
         'cashback_percent','prazo_pagamento','mensagem_final','whatsapp_consultor',
         'botao_topo_texto','titulo_principal','subtitulo',
         'passo1_pergunta','passo2_pergunta','passo3_titulo','passo3_pergunta',
