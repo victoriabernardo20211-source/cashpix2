@@ -8,296 +8,58 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --primary: {{cor_principal}}; --btn: {{cor_botao}}; --bg: {{cor_fundo}}; --text: {{cor_texto}}; }
     body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-    /* ── HEADER ── */
-    header {
-      background: #fff;
-      border-bottom: 3px solid var(--primary);
-      padding: .75rem 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    }
+    header { background: #fff; border-bottom: 3px solid var(--primary); padding: .75rem 1.25rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
     .logo { font-size: 1.35rem; font-weight: 800; color: var(--primary); letter-spacing: -.5px; }
-    .header-badge {
-      background: #f0fdf4;
-      color: #15803d;
-      font-size: .72rem;
-      font-weight: 700;
-      padding: .3rem .7rem;
-      border-radius: 20px;
-      border: 1px solid #bbf7d0;
-      letter-spacing: .03em;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      background: var(--primary);
-      color: #fff;
-      padding: 2.5rem 1.25rem 3.5rem;
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -40px;
-      left: 0;
-      right: 0;
-      height: 80px;
-      background: var(--bg);
-      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    }
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      background: rgba(255,255,255,.15);
-      color: #fff;
-      font-size: .78rem;
-      font-weight: 600;
-      padding: .35rem .85rem;
-      border-radius: 20px;
-      margin-bottom: 1.1rem;
-      letter-spacing: .04em;
-      border: 1px solid rgba(255,255,255,.25);
-    }
-    .hero h1 {
-      font-size: clamp(1.5rem, 5vw, 2.1rem);
-      font-weight: 800;
-      line-height: 1.2;
-      max-width: 380px;
-      margin: 0 auto .85rem;
-      letter-spacing: -.5px;
-    }
-    .hero-cashback-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: rgba(255,255,255,.18);
-      border: 1.5px solid rgba(255,255,255,.35);
-      border-radius: 50px;
-      padding: .6rem 1.25rem;
-      font-size: .9rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      backdrop-filter: blur(4px);
-    }
+    .header-badge { background: #f0fdf4; color: #15803d; font-size: .72rem; font-weight: 700; padding: .3rem .7rem; border-radius: 20px; border: 1px solid #bbf7d0; letter-spacing: .03em; }
+    .hero { background: var(--primary); color: #fff; padding: 2.5rem 1.25rem 3.5rem; position: relative; overflow: hidden; text-align: center; }
+    .hero::after { content: ''; position: absolute; bottom: -40px; left: 0; right: 0; height: 80px; background: var(--bg); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: .4rem; background: rgba(255,255,255,.15); color: #fff; font-size: .78rem; font-weight: 600; padding: .35rem .85rem; border-radius: 20px; margin-bottom: 1.1rem; letter-spacing: .04em; border: 1px solid rgba(255,255,255,.25); }
+    .hero h1 { font-size: clamp(1.5rem, 5vw, 2.1rem); font-weight: 800; line-height: 1.2; max-width: 380px; margin: 0 auto .85rem; letter-spacing: -.5px; }
+    .hero-cashback-pill { display: inline-flex; align-items: center; gap: .5rem; background: rgba(255,255,255,.18); border: 1.5px solid rgba(255,255,255,.35); border-radius: 50px; padding: .6rem 1.25rem; font-size: .9rem; font-weight: 600; margin-bottom: 1.5rem; }
     .hero-cashback-pill strong { font-size: 1.1rem; }
-    .btn-hero {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      background: var(--btn);
-      color: #fff;
-      font-size: 1.05rem;
-      font-weight: 700;
-      padding: 1rem 2.25rem;
-      border-radius: 50px;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 6px 20px rgba(0,0,0,.3);
-      transition: transform .15s, box-shadow .15s;
-      animation: pulse-btn 2.5s infinite;
-      letter-spacing: .01em;
-    }
-    .btn-hero:hover { transform: scale(1.04); box-shadow: 0 8px 28px rgba(0,0,0,.35); animation: none; }
-    @keyframes pulse-btn {
-      0%, 100% { box-shadow: 0 6px 20px rgba(0,0,0,.3); }
-      50% { box-shadow: 0 6px 28px rgba(194,0,22,.5); }
-    }
-    .hero-sub {
-      margin-top: 1.1rem;
-      font-size: .85rem;
-      opacity: .8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .35rem;
-    }
-
-    /* ── SOCIAL PROOF BAR ── */
-    .proof-bar {
-      background: #fff;
-      border-bottom: 1px solid #f3f4f6;
-      padding: 1rem 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .proof-item {
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-      font-size: .8rem;
-      color: #374151;
-      font-weight: 500;
-    }
-    .proof-icon { font-size: 1rem; }
-
-    /* ── FUNNEL ── */
+    .btn-hero { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; background: var(--btn); color: #fff; font-size: 1.05rem; font-weight: 700; padding: 1rem 2.25rem; border-radius: 50px; cursor: pointer; border: none; box-shadow: 0 6px 20px rgba(0,0,0,.3); transition: transform .15s, box-shadow .15s; animation: pulse-btn 2.5s infinite; letter-spacing: .01em; }
+    .btn-hero:hover { transform: scale(1.04); animation: none; }
+    @keyframes pulse-btn { 0%, 100% { box-shadow: 0 6px 20px rgba(0,0,0,.3); } 50% { box-shadow: 0 6px 28px rgba(194,0,22,.5); } }
+    .hero-sub { margin-top: 1.1rem; font-size: .85rem; opacity: .8; display: flex; align-items: center; justify-content: center; gap: .35rem; }
+    .proof-bar { background: #fff; border-bottom: 1px solid #f3f4f6; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .proof-item { display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: #374151; font-weight: 500; }
     .funnel { max-width: 520px; margin: 0 auto; padding: 1.75rem 1.1rem 4rem; }
     .step { display: none; }
     .step.active { display: block; animation: fadeUp .3s ease; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-    .card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 1.75rem 1.5rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,.08);
-      border: 1px solid #f3f4f6;
-    }
-
-    .step-badge {
-      display: inline-block;
-      background: var(--primary);
-      color: #fff;
-      font-size: .72rem;
-      font-weight: 700;
-      padding: .25rem .7rem;
-      border-radius: 20px;
-      margin-bottom: .65rem;
-      letter-spacing: .04em;
-    }
+    .card { background: #fff; border-radius: 20px; padding: 1.75rem 1.5rem; box-shadow: 0 4px 24px rgba(0,0,0,.08); border: 1px solid #f3f4f6; }
+    .step-badge { display: inline-block; background: var(--primary); color: #fff; font-size: .72rem; font-weight: 700; padding: .25rem .7rem; border-radius: 20px; margin-bottom: .65rem; letter-spacing: .04em; }
     .step-question { font-size: 1.15rem; font-weight: 700; margin-bottom: 1.25rem; color: #111; line-height: 1.35; }
-
     .progress { display: flex; gap: 5px; margin-bottom: 1.25rem; }
     .progress-dot { flex: 1; height: 5px; background: #e5e7eb; border-radius: 3px; transition: background .3s; }
     .progress-dot.done { background: var(--primary); }
-
-    .btn-choice {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      width: 100%;
-      padding: 1rem 1.25rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 14px;
-      background: #fff;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      margin-bottom: .75rem;
-      text-align: left;
-      transition: all .15s;
-      color: #111;
-    }
+    .btn-choice { display: flex; align-items: center; gap: .75rem; width: 100%; padding: 1rem 1.25rem; border: 2px solid #e5e7eb; border-radius: 14px; background: #fff; font-size: 1rem; font-weight: 500; cursor: pointer; margin-bottom: .75rem; text-align: left; transition: all .15s; color: #111; }
     .btn-choice:hover { border-color: var(--primary); background: #f0f4ff; color: var(--primary); }
     .btn-choice-icon { font-size: 1.3rem; }
-
     .input-group { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1rem; }
     .input-group label { font-size: .88rem; font-weight: 600; color: #374151; }
-    .input-group input {
-      padding: .9rem 1rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color .15s;
-      background: #fafafa;
-    }
+    .input-group input { padding: .9rem 1rem; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color .15s; background: #fafafa; }
     .input-group input:focus { border-color: var(--primary); background: #fff; }
-
-    .cashback-box {
-      background: linear-gradient(135deg, #eef2fb 0%, #e8f0fe 100%);
-      border: 2px solid var(--primary);
-      border-radius: 16px;
-      text-align: center;
-      padding: 1.4rem 1rem;
-      margin-bottom: 1.25rem;
-    }
+    .cashback-box { background: linear-gradient(135deg, #eef2fb 0%, #e8f0fe 100%); border: 2px solid var(--primary); border-radius: 16px; text-align: center; padding: 1.4rem 1rem; margin-bottom: 1.25rem; }
     .cashback-label { font-size: .82rem; color: var(--primary); font-weight: 600; margin-bottom: .35rem; opacity: .8; }
     .cashback-value { font-size: 2.4rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
-
-    .btn-primary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      width: 100%;
-      padding: 1rem;
-      background: var(--btn);
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      margin-top: .75rem;
-      transition: opacity .15s, transform .1s;
-      letter-spacing: .01em;
-    }
+    .btn-primary { display: flex; align-items: center; justify-content: center; gap: .5rem; width: 100%; padding: 1rem; background: var(--btn); color: #fff; font-size: 1rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; margin-top: .75rem; transition: opacity .15s, transform .1s; letter-spacing: .01em; }
     .btn-primary:hover { opacity: .92; transform: translateY(-1px); }
     .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-
     .pix-options { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1rem; }
-    .pix-opt {
-      padding: 1rem .75rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 14px;
-      text-align: center;
-      cursor: pointer;
-      font-size: .9rem;
-      font-weight: 600;
-      background: #fff;
-      transition: all .15s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: .35rem;
-      color: #374151;
-    }
+    .pix-opt { padding: 1rem .75rem; border: 2px solid #e5e7eb; border-radius: 14px; text-align: center; cursor: pointer; font-size: .9rem; font-weight: 600; background: #fff; transition: all .15s; display: flex; flex-direction: column; align-items: center; gap: .35rem; color: #374151; }
     .pix-opt .pix-icon { font-size: 1.6rem; }
-    .pix-opt:hover, .pix-opt.selected {
-      border-color: var(--primary);
-      background: #eef2fb;
-      color: var(--primary);
-    }
-
-    /* success */
+    .pix-opt:hover, .pix-opt.selected { border-color: var(--primary); background: #eef2fb; color: var(--primary); }
     .success-wrap { text-align: center; padding: .5rem 0; }
     .success-icon-big { font-size: 4rem; margin-bottom: .75rem; }
     .success-title { font-size: 1.45rem; font-weight: 800; margin-bottom: .5rem; color: #111; }
     .success-msg { color: #6b7280; margin-bottom: 1.5rem; font-size: .95rem; line-height: 1.6; }
-    .success-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      background: #eef2fb;
-      color: var(--primary);
-      padding: .65rem 1.5rem;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      border: 2px solid var(--primary);
-    }
-
-    /* misc */
+    .success-badge { display: inline-flex; align-items: center; gap: .4rem; background: #eef2fb; color: var(--primary); padding: .65rem 1.5rem; border-radius: 50px; font-weight: 700; font-size: 1.1rem; border: 2px solid var(--primary); }
     footer { text-align: center; padding: 1.5rem 1rem; color: #9ca3af; font-size: .78rem; border-top: 1px solid #e5e7eb; margin-top: 1rem; }
     .error-msg { color: #ef4444; font-size: .83rem; margin-top: .3rem; display: none; }
     .error-msg.visible { display: block; }
-
-    /* trust bar */
-    .trust-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .4rem;
-      font-size: .78rem;
-      color: #6b7280;
-      margin-top: 1.25rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid #f3f4f6;
-    }
+    .trust-bar { display: flex; align-items: center; justify-content: center; gap: .4rem; font-size: .78rem; color: #6b7280; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid #f3f4f6; }
+    .pix-key-group { margin-top: .75rem; margin-bottom: 0; animation: fadeUp .2s ease; }
   </style>
 </head>
 <body>
@@ -310,19 +72,14 @@
   <div class="hero">
     <div class="hero-eyebrow">💳 Programa de Cashback</div>
     <h1>{{titulo_principal}}</h1>
-    <div class="hero-cashback-pill">
-      💰 Resgate até <strong>{{cashback_percent}}%</strong> da sua fatura
-    </div>
-    <button class="btn-hero" onclick="startFunnel()">
-      {{botao_topo_texto}} →
-    </button>
+    <div class="hero-cashback-pill">💰 Resgate até <strong>{{cashback_percent}}%</strong> da sua fatura</div>
+    <button class="btn-hero" onclick="startFunnel()">{{botao_topo_texto}} →</button>
     <div class="hero-sub">🔒 100% seguro &nbsp;·&nbsp; ⚡ Recebe na hora</div>
   </div>
-
   <div class="proof-bar">
-    <div class="proof-item"><span class="proof-icon">👥</span> +12.400 resgates</div>
-    <div class="proof-item"><span class="proof-icon">⭐</span> 4.9 / 5.0</div>
-    <div class="proof-item"><span class="proof-icon">💸</span> Pix instantâneo</div>
+    <div class="proof-item"><span>👥</span> +12.400 resgates</div>
+    <div class="proof-item"><span>⭐</span> 4.9 / 5.0</div>
+    <div class="proof-item"><span>💸</span> Pix instantâneo</div>
   </div>
 </div>
 
@@ -369,10 +126,16 @@
       </div>
       <div class="step-question">{{passo3_pergunta}}</div>
       <div class="pix-options">
-        <div class="pix-opt" onclick="selectPix('cpf','CPF')"><span class="pix-icon">🪪</span>CPF</div>
-        <div class="pix-opt" onclick="selectPix('telefone','Telefone')"><span class="pix-icon">📱</span>Telefone</div>
-        <div class="pix-opt" onclick="selectPix('email','E-mail')"><span class="pix-icon">✉️</span>E-mail</div>
-        <div class="pix-opt" onclick="selectPix('aleatoria','Aleatória')"><span class="pix-icon">🔑</span>Aleatória</div>
+        <div class="pix-opt" onclick="selectPix('cpf')"><span class="pix-icon">🪪</span>CPF</div>
+        <div class="pix-opt" onclick="selectPix('telefone')"><span class="pix-icon">📱</span>Telefone</div>
+        <div class="pix-opt" onclick="selectPix('email')"><span class="pix-icon">✉️</span>E-mail</div>
+        <div class="pix-opt" onclick="selectPix('aleatoria')"><span class="pix-icon">🔑</span>Aleatória</div>
+      </div>
+      <!-- campo dinâmico para email/aleatória -->
+      <div class="input-group pix-key-group" id="pix-key-group" style="display:none">
+        <label id="pix-key-label">Informe sua chave Pix</label>
+        <input type="text" id="pix-key-input" placeholder="">
+        <span class="error-msg" id="pix-key-error">Informe a chave Pix corretamente.</span>
       </div>
       <button class="btn-primary" id="btn-step3" onclick="handleStep3()" disabled>Continuar →</button>
     </div>
@@ -429,12 +192,11 @@
 </div>
 
 <footer>{{rodape_legal}}</footer>
-
 <script>
 const CASHBACK_PCT = {{cashback_percent}} / 100;
 const MSG_FINAL = `{{mensagem_final}}`;
 const PRAZO = `{{prazo_pagamento}}`;
-let data = { fatura: 0, cashback: 0, tipo_chave: '', chave_pix: '', telefone: '', cpf: '', nome: '' };
+let data = { fatura: 0, cashback: 0, tipo_chave: '', chave_pix: '', telefone: '', cpf: '', nome: '', leadId: null };
 
 function startFunnel() {
   document.getElementById('hero-section').style.display = 'none';
@@ -476,13 +238,48 @@ function handleStep2() {
   document.getElementById('cashback-confirm').textContent = 'R$ ' + data.cashback.toFixed(2).replace('.', ',');
   showStep(3);
 }
-function selectPix(tipo, label) {
+
+function selectPix(tipo) {
   document.querySelectorAll('.pix-opt').forEach(el => el.classList.remove('selected'));
   event.currentTarget.classList.add('selected');
-  data.tipo_chave = tipo; data.chave_pix = tipo;
+  data.tipo_chave = tipo;
+  data.chave_pix = '';
+
+  const group = document.getElementById('pix-key-group');
+  const label = document.getElementById('pix-key-label');
+  const input = document.getElementById('pix-key-input');
+
+  if (tipo === 'email') {
+    group.style.display = 'flex';
+    label.textContent = '✉️ Informe seu e-mail';
+    input.type = 'email';
+    input.placeholder = 'seuemail@exemplo.com';
+    input.value = '';
+  } else if (tipo === 'aleatoria') {
+    group.style.display = 'flex';
+    label.textContent = '🔑 Chave aleatória';
+    input.type = 'text';
+    input.placeholder = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+    input.value = '';
+  } else {
+    group.style.display = 'none';
+    // CPF preenchido no passo 5, telefone preenchido no passo 4
+    data.chave_pix = tipo;
+  }
   document.getElementById('btn-step3').disabled = false;
 }
-function handleStep3() { if (!data.tipo_chave) return; showStep(4); }
+
+function handleStep3() {
+  if (!data.tipo_chave) return;
+  if (data.tipo_chave === 'email' || data.tipo_chave === 'aleatoria') {
+    const val = document.getElementById('pix-key-input').value.trim();
+    if (!val) { document.getElementById('pix-key-error').classList.add('visible'); return; }
+    document.getElementById('pix-key-error').classList.remove('visible');
+    data.chave_pix = val;
+  }
+  showStep(4);
+}
+
 const telInput = document.getElementById('tel-input');
 telInput.addEventListener('input', () => {
   let raw = telInput.value.replace(/\D/g, '').slice(0, 11);
@@ -490,14 +287,28 @@ telInput.addEventListener('input', () => {
   else if (raw.length > 2) raw = raw.replace(/(\d{2})(\d{0,5})/, '($1) $2');
   telInput.value = raw;
 });
-function handleStep4() {
+
+async function handleStep4() {
   const raw = telInput.value.replace(/\D/g, '');
   if (raw.length < 10) { document.getElementById('tel-error').classList.add('visible'); return; }
   document.getElementById('tel-error').classList.remove('visible');
   data.telefone = raw;
   if (data.tipo_chave === 'telefone') data.chave_pix = raw;
+
+  // salva lead parcial em background
+  try {
+    const resp = await fetch('/api/lead/parcial', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ telefone: data.telefone, fatura: data.fatura, cashback: data.cashback, tipo_chave: data.tipo_chave, chave_pix: data.chave_pix })
+    });
+    const json = await resp.json();
+    if (json.ok) data.leadId = json.id;
+  } catch (e) { /* ignora erro silencioso */ }
+
   showStep(5);
 }
+
 const cpfInput = document.getElementById('cpf-input');
 cpfInput.addEventListener('input', () => {
   let raw = cpfInput.value.replace(/\D/g, '').slice(0, 11);
@@ -506,6 +317,7 @@ cpfInput.addEventListener('input', () => {
   else if (raw.length > 3) raw = raw.replace(/(\d{3})(\d{0,3})/, '$1.$2');
   cpfInput.value = raw;
 });
+
 async function handleSubmit() {
   const cpfRaw = cpfInput.value.replace(/\D/g, '');
   const nome = document.getElementById('nome-input').value.trim();
@@ -515,13 +327,32 @@ async function handleSubmit() {
   if (nome.length < 4) { document.getElementById('nome-error').classList.add('visible'); ok = false; }
   else document.getElementById('nome-error').classList.remove('visible');
   if (!ok) return;
-  data.cpf = cpfRaw; data.nome = nome;
+  data.cpf = cpfRaw;
+  data.nome = nome;
   if (data.tipo_chave === 'cpf') data.chave_pix = cpfRaw;
+
   const btn = document.getElementById('btn-submit');
   btn.disabled = true; btn.textContent = 'Aguarde...';
+
   try {
-    const resp = await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-    const json = await resp.json();
+    let json;
+    if (data.leadId) {
+      // completa o lead parcial já salvo
+      const resp = await fetch(`/api/lead/${data.leadId}/completar`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, cpf: cpfRaw })
+      });
+      json = await resp.json();
+    } else {
+      // fallback: salva tudo de uma vez
+      const resp = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      json = await resp.json();
+    }
     if (json.ok) {
       const firstName = nome.split(' ')[0];
       const cbStr = 'R$ ' + data.cashback.toFixed(2).replace('.', ',');

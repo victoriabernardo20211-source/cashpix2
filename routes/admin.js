@@ -60,18 +60,21 @@ function makeAdminRouter(adminPath) {
     const atendimento = leads.filter(l => l.status === 'em_atendimento').length;
     const atendidos = leads.filter(l => l.status === 'atendido').length;
     const pagos = leads.filter(l => l.status === 'pago').length;
+    const incompletos = leads.filter(l => l.status === 'incompleto').length;
 
     html = html.replace('{{total}}', total)
       .replace('{{novos}}', novos)
       .replace('{{em_atendimento}}', atendimento)
       .replace('{{atendidos}}', atendidos)
-      .replace('{{pagos}}', pagos);
+      .replace('{{pagos}}', pagos)
+      .replace('{{incompletos}}', incompletos);
 
     const statusBadges = {
       novo: '<span class="badge badge-novo">Novo</span>',
       em_atendimento: '<span class="badge badge-atendimento">Em atendimento</span>',
       atendido: '<span class="badge badge-atendido">Atendido</span>',
       pago: '<span class="badge badge-pago">Pago</span>',
+      incompleto: '<span class="badge badge-incompleto">⚠️ Incompleto</span>',
     };
 
     const rows = leads.map(l => {
@@ -96,9 +99,12 @@ function makeAdminRouter(adminPath) {
       const atendidoPor = l.atendido_por ? `<small class="text-muted">${escHtml(l.atendido_por)}</small>` : '';
       const obs = l.observacao ? `<small class="text-obs" title="${escHtml(l.observacao)}">💬 ${escHtml(l.observacao.slice(0,30))}${l.observacao.length>30?'...':''}</small>` : '';
 
+      const nomeDisplay = l.nome === '—' ? '<span class="text-muted">— aguardando</span>' : escHtml(l.nome);
+      const cpfDisplay = l.cpf === '00000000000' ? '<span class="text-muted">—</span>' : fmtCpf(l.cpf);
+
       return `<tr>
-        <td>${escHtml(l.nome)}</td>
-        <td>${fmtCpf(l.cpf)}</td>
+        <td>${nomeDisplay}</td>
+        <td>${cpfDisplay}</td>
         <td>${fmtTel(l.telefone)}</td>
         <td>${escHtml(l.chave_pix)}<br><small class="text-muted">${escHtml(l.tipo_chave)}</small></td>
         <td>R$ ${Number(l.fatura).toFixed(2).replace('.', ',')}</td>
