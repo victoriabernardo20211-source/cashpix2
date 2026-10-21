@@ -67,7 +67,7 @@ async function initDb() {
 
     const defaults = {
       marca_nome: 'CashPix', marca_slogan: 'Resgate seu cashback em 5 passos',
-      cor_principal: '#254F9B', cor_botao: '#C20016', cor_fundo: '#f5f7fa', cor_texto: '#1a1a1a',
+      cor_principal: '#2563EB', cor_botao: '#C20016', cor_fundo: '#f5f7fa', cor_texto: '#1a1a1a',
       cashback_percent: '15', prazo_pagamento: '24h',
       mensagem_final: 'Tudo certo, {nome}! Seu cashback de R$ {valor} foi aprovado. Um consultor vai entrar em contato em breve.',
       whatsapp_consultor: '', botao_topo_texto: 'Resgatar cashback agora',
@@ -85,8 +85,8 @@ async function initDb() {
       await client.query('INSERT INTO site_config (chave, valor) VALUES ($1, $2) ON CONFLICT (chave) DO NOTHING', [k, v]);
     }
 
-    // migrações de cores: atualiza valores antigos para a paleta correta
-    await client.query(`UPDATE site_config SET valor = '#254F9B', updated_at = NOW() WHERE chave = 'cor_principal' AND valor = '#22c55e'`);
+    // migra cor principal para azul correto (sobrescreve verde antigo e azul escuro anterior)
+    await client.query(`UPDATE site_config SET valor = '#2563EB', updated_at = NOW() WHERE chave = 'cor_principal' AND valor IN ('#22c55e', '#254F9B')`);
     await client.query(`INSERT INTO site_config (chave, valor) VALUES ('cor_botao', '#C20016') ON CONFLICT (chave) DO NOTHING`);
     await client.query(`INSERT INTO site_config (chave, valor) VALUES ('cor_fundo', '#f5f7fa') ON CONFLICT (chave) DO NOTHING`);
     await client.query(`INSERT INTO site_config (chave, valor) VALUES ('cor_texto', '#1a1a1a') ON CONFLICT (chave) DO NOTHING`);
