@@ -85,6 +85,12 @@ async function initDb() {
       await client.query('INSERT INTO site_config (chave, valor) VALUES ($1, $2) ON CONFLICT (chave) DO NOTHING', [k, v]);
     }
 
+    // migrações de cores: atualiza valores antigos para a paleta correta
+    await client.query(`UPDATE site_config SET valor = '#254F9B', updated_at = NOW() WHERE chave = 'cor_principal' AND valor = '#22c55e'`);
+    await client.query(`INSERT INTO site_config (chave, valor) VALUES ('cor_botao', '#C20016') ON CONFLICT (chave) DO NOTHING`);
+    await client.query(`INSERT INTO site_config (chave, valor) VALUES ('cor_fundo', '#f5f7fa') ON CONFLICT (chave) DO NOTHING`);
+    await client.query(`INSERT INTO site_config (chave, valor) VALUES ('cor_texto', '#1a1a1a') ON CONFLICT (chave) DO NOTHING`);
+
     initialized = true;
     console.log('[DB] Inicializado.');
   } finally {
