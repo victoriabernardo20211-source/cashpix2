@@ -244,6 +244,23 @@ document.getElementById('btn-step2').addEventListener('click', function() {
   showStep(3);
 });
 
+var pixKeyInput = document.getElementById('pix-key-input');
+
+function maskCpf(val) {
+  var raw = val.replace(/\D/g, '').slice(0, 11);
+  if (raw.length > 9) return raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  if (raw.length > 6) return raw.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+  if (raw.length > 3) return raw.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+  return raw;
+}
+
+function maskTel(val) {
+  var raw = val.replace(/\D/g, '').slice(0, 11);
+  if (raw.length > 6) return raw.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+  if (raw.length > 2) return raw.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+  return raw;
+}
+
 function selectPix(tipo) {
   document.querySelectorAll('.pix-opt').forEach(function(el) { el.classList.remove('selected'); });
   document.getElementById('pix-' + tipo).classList.add('selected');
@@ -251,24 +268,40 @@ function selectPix(tipo) {
   data.chave_pix = '';
   var group = document.getElementById('pix-key-group');
   var label = document.getElementById('pix-key-label');
-  var input = document.getElementById('pix-key-input');
-  if (tipo === 'email') {
+
+  pixKeyInput.oninput = null;
+  pixKeyInput.value = '';
+
+  if (tipo === 'cpf') {
     group.style.display = 'flex';
-    label.textContent = '✉️ Informe seu e-mail';
-    input.type = 'email';
-    input.placeholder = 'seuemail@exemplo.com';
-    input.value = '';
+    label.textContent = '🪴 Informe seu CPF (chave Pix)';
+    pixKeyInput.type = 'text';
+    pixKeyInput.inputMode = 'numeric';
+    pixKeyInput.placeholder = '000.000.000-00';
+    pixKeyInput.oninput = function() { pixKeyInput.value = maskCpf(pixKeyInput.value); };
+  } else if (tipo === 'telefone') {
+    group.style.display = 'flex';
+    label.textContent = '📱 Informe seu telefone (chave Pix)';
+    pixKeyInput.type = 'tel';
+    pixKeyInput.inputMode = 'tel';
+    pixKeyInput.placeholder = '(11) 91234-5678';
+    pixKeyInput.oninput = function() { pixKeyInput.value = maskTel(pixKeyInput.value); };
+  } else if (tipo === 'email') {
+    group.style.display = 'flex';
+    label.textContent = '✉️ Informe seu e-mail (chave Pix)';
+    pixKeyInput.type = 'email';
+    pixKeyInput.inputMode = 'email';
+    pixKeyInput.placeholder = 'seuemail@exemplo.com';
   } else if (tipo === 'aleatoria') {
     group.style.display = 'flex';
     label.textContent = '🔑 Chave aleatória';
-    input.type = 'text';
-    input.placeholder = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
-    input.value = '';
-  } else {
-    group.style.display = 'none';
-    data.chave_pix = tipo;
+    pixKeyInput.type = 'text';
+    pixKeyInput.inputMode = 'text';
+    pixKeyInput.placeholder = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
   }
+
   document.getElementById('btn-step3').disabled = false;
+  pixKeyInput.focus();
 }
 
 ['cpf','telefone','email','aleatoria'].forEach(function(tipo) {
@@ -277,10 +310,15 @@ function selectPix(tipo) {
 
 document.getElementById('btn-step3').addEventListener('click', function() {
   if (!data.tipo_chave) return;
-  if (data.tipo_chave === 'email' || data.tipo_chave === 'aleatoria') {
-    var val = document.getElementById('pix-key-input').value.trim();
-    if (!val) { document.getElementById('pix-key-error').classList.add('visible'); return; }
-    document.getElementById('pix-key-error').classList.remove('visible');
+  var val = pixKeyInput.value.trim();
+  if (!val) { document.getElementById('pix-key-error').classList.add('visible'); return; }
+  document.getElementById('pix-key-error').classList.remove('visible');
+  // Store clean value
+  if (data.tipo_chave === 'cpf') {
+    data.chave_pix = val.replace(/\D/g, '');
+  } else if (data.tipo_chave === 'telefone') {
+    data.chave_pix = val.replace(/\D/g, '');
+  } else {
     data.chave_pix = val;
   }
   showStep(4);
@@ -288,10 +326,7 @@ document.getElementById('btn-step3').addEventListener('click', function() {
 
 var telInput = document.getElementById('tel-input');
 telInput.addEventListener('input', function() {
-  var raw = telInput.value.replace(/\D/g, '').slice(0, 11);
-  if (raw.length > 6) raw = raw.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
-  else if (raw.length > 2) raw = raw.replace(/(\d{2})(\d{0,5})/, '($1) $2');
-  telInput.value = raw;
+  telInput.value = maskTel(telInput.value);
 });
 
 document.getElementById('btn-step4').addEventListener('click', async function() {
@@ -299,7 +334,6 @@ document.getElementById('btn-step4').addEventListener('click', async function() 
   if (raw.length < 10) { document.getElementById('tel-error').classList.add('visible'); return; }
   document.getElementById('tel-error').classList.remove('visible');
   data.telefone = raw;
-  if (data.tipo_chave === 'telefone') data.chave_pix = raw;
   try {
     var resp = await fetch('/api/lead/parcial', {
       method: 'POST',
@@ -314,11 +348,7 @@ document.getElementById('btn-step4').addEventListener('click', async function() 
 
 var cpfInput = document.getElementById('cpf-input');
 cpfInput.addEventListener('input', function() {
-  var raw = cpfInput.value.replace(/\D/g, '').slice(0, 11);
-  if (raw.length > 9) raw = raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  else if (raw.length > 6) raw = raw.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
-  else if (raw.length > 3) raw = raw.replace(/(\d{3})(\d{0,3})/, '$1.$2');
-  cpfInput.value = raw;
+  cpfInput.value = maskCpf(cpfInput.value);
 });
 
 document.getElementById('btn-submit').addEventListener('click', async function() {
@@ -332,6 +362,7 @@ document.getElementById('btn-submit').addEventListener('click', async function()
   if (!ok) return;
   data.cpf = cpfRaw;
   data.nome = nome;
+  // If CPF was chosen as pix key, make sure chave_pix matches what user entered in step 5
   if (data.tipo_chave === 'cpf') data.chave_pix = cpfRaw;
   var btn = document.getElementById('btn-submit');
   btn.disabled = true; btn.textContent = 'Aguarde...';
