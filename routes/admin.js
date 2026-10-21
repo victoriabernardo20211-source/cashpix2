@@ -36,32 +36,49 @@ function makeAdminRouter(adminPath) {
     return html;
   }
 
+  function detectDevice(ua) {
+    if (!ua) return '<span class="dev-desktop">🖥️ Desktop</span>';
+    if (/iphone/i.test(ua)) return '<span class="dev-iphone">📱 iPhone</span>';
+    if (/ipad/i.test(ua)) return '<span class="dev-iphone">📱 iPad</span>';
+    if (/android/i.test(ua)) return '<span class="dev-android">📱 Android</span>';
+    if (/mobile/i.test(ua)) return '<span class="dev-android">📱 Mobile</span>';
+    return '<span class="dev-desktop">🖥️ Desktop</span>';
+  }
+
   function renderLeads(adminPath, admin, leads, config, filtro) {
     let html = readView('admin-leads.html');
     html = html.replace(/{{admin_path}}/g, adminPath);
     html = html.replace(/{{admin_nome}}/g, admin.nome || 'Admin');
+    html = html.replace(/{{admin_nome_js}}/g, escHtml(admin.nome || 'Admin'));
 
     const total = leads.length;
     const novos = leads.filter(l => l.status === 'novo').length;
     const atendimento = leads.filter(l => l.status === 'em_atendimento').length;
+    const atendidos = leads.filter(l => l.status === 'atendido').length;
     const pagos = leads.filter(l => l.status === 'pago').length;
+    const incompletos = leads.filter(l => l.status === 'incompleto').length;
 
     html = html.replace('{{total}}', total);
     html = html.replace('{{novos}}', novos);
     html = html.replace('{{em_atendimento}}', atendimento);
+    html = html.replace('{{atendidos}}', atendidos);
     html = html.replace('{{pagos}}', pagos);
+    html = html.replace('{{incompletos}}', incompletos);
     html = html.replace('{{filtro_ativo}}', filtro || 'todos');
+
+    const statusBadge = {
+      novo: '<span class="badge badge-novo">⏳ Pendente</span>',
+      em_atendimento: '<span class="badge badge-atendimento">Em atendimento</span>',
+      atendido: '<span class="badge badge-atendido">Atendido</span>',
+      pago: '<span class="badge badge-pago">Pago</span>',
+      incompleto: '<span class="badge badge-incompleto">⚠️ Incompleto</span>',
+    };
 
     const rows = leads.map(l => {
       const d = new Date(l.created_at);
       const data = d.toLocaleDateString('pt-BR');
       const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      const statusBadge = {
-        novo: '<span class="badge badge-novo">Novo</span>',
-        em_atendimento: '<span class="badge badge-atendimento">Em atendimento</span>',
-        pago: '<span class="badge badge-pago">Pago</span>',
-        incompleto: '<span class="badge badge-incompleto">⚠️ Incompleto</span>',
-      }[l.status] || l.status;
+      const badge = statusBadge[l.status] || l.status;
 
       const acoes = (l.status === 'novo' || l.status === 'incompleto')
         ? `<form method="POST" action="/${adminPath}/leads/${l.id}/status" style="display:inline">
@@ -77,6 +94,9 @@ function makeAdminRouter(adminPath) {
 
       const nomeDisplay = l.status === 'incompleto' ? '<em style="color:#9ca3af">— aguardando</em>' : escHtml(l.nome);
       const cpfDisplay = l.status === 'incompleto' ? '<span class="text-muted">—</span>' : fmtCpf(l.cpf);
+      const atendimentoDisplay = l.atendido_por
+        ? `<span class="text-obs">${escHtml(l.atendido_por)}</span>${l.observacao ? `<span class="text-obs" title="${escHtml(l.observacao)}">💬 ${escHtml(l.observacao).slice(0, 30)}${l.observacao.length > 30 ? '...' : ''}</span>` : ''}`
+        : '<span class="text-muted">—</span>';
 
       return `<tr>
         <td>${nomeDisplay}</td>
@@ -86,12 +106,14 @@ function makeAdminRouter(adminPath) {
         <td>R$ ${Number(l.fatura).toFixed(2).replace('.', ',')}</td>
         <td><strong>R$ ${Number(l.cashback).toFixed(2).replace('.', ',')}</strong></td>
         <td>${data}<br><small class="text-muted">${hora}</small></td>
-        <td>${statusBadge}</td>
+        <td>${detectDevice(l.user_agent)}</td>
+        <td>${badge}</td>
+        <td>${atendimentoDisplay}</td>
         <td>${acoes}</td>
       </tr>`;
     }).join('');
 
-    html = html.replace('{{leads_rows}}', rows || '<tr><td colspan="9" style="text-align:center;padding:2rem;color:#999">Nenhum lead encontrado.</td></tr>');
+    html = html.replace('{{leads_rows}}', rows || '<tr><td colspan="11" style="text-align:center;padding:2rem;color:#999">Nenhum lead encontrado.</td></tr>');
     return html;
   }
 
@@ -185,12 +207,12 @@ function makeAdminRouter(adminPath) {
   router.post('/leads/:id/status', auth, express.urlencoded({ extended: false }), async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
-      const { status } = req.body || {};
-      const valid = ['novo', 'em_atendimento', 'pago'];
+      const { status, atendido_por, observacao } = req.body || {};
+      const valid = ['novo', 'em_atendimento', 'atendido', 'pago'];
       if (!valid.includes(status)) return res.redirect(`/${adminPath}/leads`);
       await getPool().query(
-        'UPDATE leads SET status = $1, consultor = $2 WHERE id = $3',
-        [status, req.admin.nome, id]
+        'UPDATE leads SET status = $1, consultor = $2, atendido_por = $3, observacao = $4 WHERE id = $5',
+        [status, req.admin.nome, atendido_por || req.admin.nome, observacao || null, id]
       );
       res.redirect(`/${adminPath}/leads`);
     } catch (err) {
