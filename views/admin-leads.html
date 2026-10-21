@@ -13,53 +13,59 @@
     .nav-link { display: flex; align-items: center; gap: .6rem; padding: .65rem .75rem; border-radius: 8px; color: #d1d5db; text-decoration: none; font-size: .9rem; margin-bottom: .25rem; transition: background .15s; }
     .nav-link:hover, .nav-link.active { background: #1f2937; color: #fff; }
     .nav-link.active { color: #22c55e; }
-    .nav-sep { border: none; border-top: 1px solid #374151; margin: .75rem 0; }
-    .logout-btn { display: block; width: 100%; padding: .65rem .75rem; border-radius: 8px; background: none; border: none; color: #9ca3af; font-size: .9rem; text-align: left; cursor: pointer; margin-top: auto; }
+    .logout-btn { display: block; width: 100%; padding: .65rem .75rem; border-radius: 8px; background: none; border: none; color: #9ca3af; font-size: .9rem; text-align: left; cursor: pointer; }
     .logout-btn:hover { background: #1f2937; color: #fff; }
     .sidebar-footer { position: absolute; bottom: 1.5rem; left: 1rem; right: 1rem; }
     .admin-name { color: #6b7280; font-size: .78rem; padding: 0 .75rem; margin-bottom: .5rem; }
-
     .main { margin-left: 220px; padding: 2rem; min-height: 100vh; }
     .page-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; }
-
-    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .metric-card { background: #fff; border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
-    .metric-label { font-size: .8rem; color: #6b7280; margin-bottom: .25rem; }
-    .metric-value { font-size: 2rem; font-weight: 700; }
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .metric-card { background: #fff; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .metric-label { font-size: .75rem; color: #6b7280; margin-bottom: .2rem; }
+    .metric-value { font-size: 1.8rem; font-weight: 700; }
     .metric-value.green { color: #16a34a; }
     .metric-value.yellow { color: #d97706; }
     .metric-value.blue { color: #2563eb; }
-
-    .toolbar { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
-    .filter-btn { padding: .5rem 1rem; border-radius: 8px; border: 1.5px solid #e5e7eb; background: #fff; font-size: .85rem; cursor: pointer; text-decoration: none; color: #374151; transition: all .15s; }
+    .metric-value.purple { color: #7c3aed; }
+    .metric-value.gray { color: #9ca3af; }
+    .toolbar { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+    .filter-btn { padding: .45rem .9rem; border-radius: 8px; border: 1.5px solid #e5e7eb; background: #fff; font-size: .82rem; cursor: pointer; text-decoration: none; color: #374151; transition: all .15s; }
     .filter-btn:hover { border-color: #22c55e; color: #22c55e; }
     .filter-btn.active { background: #22c55e; color: #fff; border-color: #22c55e; }
-    .export-btn { padding: .5rem 1rem; border-radius: 8px; border: 1.5px solid #e5e7eb; background: #fff; font-size: .85rem; cursor: pointer; text-decoration: none; color: #374151; margin-left: auto; transition: all .15s; }
+    .export-btn { padding: .45rem .9rem; border-radius: 8px; border: 1.5px solid #e5e7eb; background: #fff; font-size: .82rem; cursor: pointer; text-decoration: none; color: #374151; margin-left: auto; }
     .export-btn:hover { border-color: #3b82f6; color: #3b82f6; }
-
-    .table-wrap { background: #fff; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); overflow: hidden; }
-    table { width: 100%; border-collapse: collapse; font-size: .875rem; }
-    th { background: #f9fafb; padding: .75rem 1rem; text-align: left; font-size: .78rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
-    td { padding: .85rem 1rem; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    .table-wrap { background: #fff; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); overflow: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    th { background: #f9fafb; padding: .7rem .9rem; text-align: left; font-size: .75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
+    td { padding: .8rem .9rem; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fafafa; }
-
-    .badge { display: inline-block; padding: .25rem .7rem; border-radius: 20px; font-size: .75rem; font-weight: 600; }
+    .badge { display: inline-block; padding: .2rem .65rem; border-radius: 20px; font-size: .73rem; font-weight: 600; }
     .badge-novo { background: #dbeafe; color: #1d4ed8; }
     .badge-atendimento { background: #fef3c7; color: #92400e; }
+    .badge-atendido { background: #ede9fe; color: #5b21b6; }
     .badge-pago { background: #d1fae5; color: #065f46; }
-
-    .text-muted { color: #9ca3af; font-size: .8rem; }
-    .btn { padding: .4rem .85rem; border-radius: 8px; font-size: .82rem; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; }
+    .badge-incompleto { background: #f3f4f6; color: #6b7280; }
+    .text-muted { color: #9ca3af; font-size: .78rem; }
+    .text-obs { color: #6b7280; font-size: .75rem; display: block; cursor: help; }
+    .btn { padding: .38rem .8rem; border-radius: 8px; font-size: .8rem; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; white-space: nowrap; }
     .btn:hover { opacity: .85; }
-    .btn-sm { padding: .35rem .7rem; font-size: .8rem; }
     .btn-green { background: #22c55e; color: #fff; }
     .btn-yellow { background: #f59e0b; color: #fff; }
-
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .main { margin-left: 0; padding: 1rem; }
-    }
+    .btn-purple { background: #7c3aed; color: #fff; }
+    .dev-iphone { color: #1d4ed8; font-size: .82rem; }
+    .dev-android { color: #16a34a; font-size: .82rem; }
+    .dev-desktop { color: #6b7280; font-size: .82rem; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: #fff; border-radius: 16px; padding: 2rem; width: 100%; max-width: 420px; margin: 1rem; box-shadow: 0 8px 40px rgba(0,0,0,.2); }
+    .modal h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem; }
+    .modal label { display: block; font-size: .85rem; font-weight: 500; color: #374151; margin-bottom: .35rem; margin-top: .9rem; }
+    .modal input, .modal textarea { width: 100%; padding: .7rem .9rem; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: .9rem; outline: none; font-family: inherit; }
+    .modal input:focus, .modal textarea:focus { border-color: #22c55e; }
+    .modal-actions { display: flex; gap: .75rem; margin-top: 1.5rem; }
+    .btn-cancel { background: #f3f4f6; color: #374151; padding: .7rem 1.2rem; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; font-size: .9rem; }
+    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 1rem; } }
   </style>
 </head>
 <body>
@@ -70,68 +76,58 @@
   <a class="nav-link" href="/" target="_blank">🌐 Ver site público</a>
   <div class="sidebar-footer">
     <div class="admin-name">{{admin_nome}}</div>
-    <form method="POST" action="/{{admin_path}}/logout">
-      <button type="submit" class="logout-btn">🚪 Sair</button>
-    </form>
+    <form method="POST" action="/{{admin_path}}/logout"><button type="submit" class="logout-btn">🚪 Sair</button></form>
   </div>
 </nav>
-
 <main class="main">
   <div class="page-title">Leads</div>
-
   <div class="metrics">
-    <div class="metric-card">
-      <div class="metric-label">Total</div>
-      <div class="metric-value">{{total}}</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Novos</div>
-      <div class="metric-value blue">{{novos}}</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Em atendimento</div>
-      <div class="metric-value yellow">{{em_atendimento}}</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Pagos</div>
-      <div class="metric-value green">{{pagos}}</div>
-    </div>
+    <div class="metric-card"><div class="metric-label">Total</div><div class="metric-value">{{total}}</div></div>
+    <div class="metric-card"><div class="metric-label">Novos</div><div class="metric-value blue">{{novos}}</div></div>
+    <div class="metric-card"><div class="metric-label">Em atendimento</div><div class="metric-value yellow">{{em_atendimento}}</div></div>
+    <div class="metric-card"><div class="metric-label">Atendidos</div><div class="metric-value purple">{{atendidos}}</div></div>
+    <div class="metric-card"><div class="metric-label">Pagos</div><div class="metric-value green">{{pagos}}</div></div>
+    <div class="metric-card"><div class="metric-label">⚠️ Incompletos</div><div class="metric-value gray">{{incompletos}}</div></div>
   </div>
-
   <div class="toolbar">
-    <a class="filter-btn {{filtro_ativo === 'todos' ? 'active' : ''}}" href="/{{admin_path}}/leads?status=todos" style="{{filtro_ativo}}">
-      Todos
-    </a>
+    <a class="filter-btn" href="/{{admin_path}}/leads?status=todos">Todos</a>
     <a class="filter-btn" href="/{{admin_path}}/leads?status=novo">Novos</a>
     <a class="filter-btn" href="/{{admin_path}}/leads?status=em_atendimento">Em atendimento</a>
+    <a class="filter-btn" href="/{{admin_path}}/leads?status=atendido">Atendidos</a>
     <a class="filter-btn" href="/{{admin_path}}/leads?status=pago">Pagos</a>
+    <a class="filter-btn" href="/{{admin_path}}/leads?status=incompleto">⚠️ Incompletos</a>
     <a class="export-btn" href="/{{admin_path}}/leads/export.csv">⬇️ Exportar CSV</a>
   </div>
-
   <div class="table-wrap">
     <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>CPF</th>
-          <th>Telefone</th>
-          <th>Chave Pix</th>
-          <th>Fatura</th>
-          <th>Cashback</th>
-          <th>Data</th>
-          <th>Status</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{leads_rows}}
-      </tbody>
+      <thead><tr>
+        <th>Nome</th><th>CPF</th><th>Telefone</th><th>Chave Pix</th>
+        <th>Fatura</th><th>Cashback</th><th>Data</th><th>Dispositivo</th>
+        <th>Status</th><th>Atendimento</th><th>Ação</th>
+      </tr></thead>
+      <tbody>{{leads_rows}}</tbody>
     </table>
   </div>
 </main>
-
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Confirmar alteração</h3>
+    <form method="POST" id="modal-form">
+      <input type="hidden" name="status" id="modal-status">
+      <label>Quem está realizando essa alteração?</label>
+      <input type="text" name="atendido_por" id="modal-quem" placeholder="Nome do consultor" required>
+      <label>Observação (opcional)</label>
+      <textarea name="observacao" id="modal-obs" rows="3" placeholder="Ex: Cliente confirmou interesse..."></textarea>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-green" style="flex:1">Confirmar</button>
+      </div>
+    </form>
+  </div>
+</div>
 <script>
-// Highlight active filter button
+const ADMIN_NOME = '{{admin_nome_js}}';
+const ADMIN_PATH = '{{admin_path}}';
 const params = new URLSearchParams(window.location.search);
 const filtro = params.get('status') || 'todos';
 document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -139,6 +135,17 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   if ((url.searchParams.get('status') || 'todos') === filtro) btn.classList.add('active');
   else btn.classList.remove('active');
 });
+function openModal(id, status, titulo) {
+  document.getElementById('modal-title').textContent = titulo;
+  document.getElementById('modal-form').action = `/${ADMIN_PATH}/leads/${id}/status`;
+  document.getElementById('modal-status').value = status;
+  document.getElementById('modal-quem').value = ADMIN_NOME;
+  document.getElementById('modal-obs').value = '';
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('modal-quem').focus();
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 </script>
 </body>
 </html>
