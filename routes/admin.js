@@ -45,11 +45,13 @@ function makeAdminRouter(adminPath) {
     const novos = leads.filter(l => l.status === 'novo').length;
     const atendimento = leads.filter(l => l.status === 'em_atendimento').length;
     const pagos = leads.filter(l => l.status === 'pago').length;
+    const incompletos = leads.filter(l => l.status === 'incompleto').length;
 
     html = html.replace('{{total}}', total);
     html = html.replace('{{novos}}', novos);
     html = html.replace('{{em_atendimento}}', atendimento);
     html = html.replace('{{pagos}}', pagos);
+    html = html.replace('{{incompletos}}', incompletos);
     html = html.replace('{{filtro_ativo}}', filtro || 'todos');
 
     const rows = leads.map(l => {
@@ -60,9 +62,10 @@ function makeAdminRouter(adminPath) {
         novo: '<span class="badge badge-novo">Novo</span>',
         em_atendimento: '<span class="badge badge-atendimento">Em atendimento</span>',
         pago: '<span class="badge badge-pago">Pago</span>',
+        incompleto: '<span class="badge badge-incompleto">⚠️ Incompleto</span>',
       }[l.status] || l.status;
 
-      const acoes = l.status === 'novo'
+      const acoes = (l.status === 'novo' || l.status === 'incompleto')
         ? `<form method="POST" action="/${adminPath}/leads/${l.id}/status" style="display:inline">
              <input type="hidden" name="status" value="em_atendimento">
              <button class="btn btn-sm btn-yellow" type="submit">Em atendimento</button>
@@ -74,9 +77,12 @@ function makeAdminRouter(adminPath) {
            </form>`
         : '<span class="text-muted">—</span>';
 
+      const nomeDisplay = l.status === 'incompleto' ? '<em style="color:#9ca3af">— aguardando</em>' : escHtml(l.nome);
+      const cpfDisplay = l.status === 'incompleto' ? '<span class="text-muted">—</span>' : fmtCpf(l.cpf);
+
       return `<tr>
-        <td>${escHtml(l.nome)}</td>
-        <td>${fmtCpf(l.cpf)}</td>
+        <td>${nomeDisplay}</td>
+        <td>${cpfDisplay}</td>
         <td>${fmtTel(l.telefone)}</td>
         <td>${escHtml(l.chave_pix)}<br><small class="text-muted">${escHtml(l.tipo_chave)}</small></td>
         <td>R$ ${Number(l.fatura).toFixed(2).replace('.', ',')}</td>
@@ -240,7 +246,8 @@ function makeAdminRouter(adminPath) {
   router.post('/personalizar', auth, express.urlencoded({ extended: false }), async (req, res) => {
     try {
       const allowed = [
-        'marca_nome', 'marca_slogan', 'cor_principal', 'cashback_percent', 'prazo_pagamento',
+        'marca_nome', 'marca_slogan', 'cor_principal', 'cor_botao', 'cor_fundo', 'cor_texto',
+        'cashback_percent', 'prazo_pagamento',
         'mensagem_final', 'whatsapp_consultor', 'botao_topo_texto', 'titulo_principal', 'subtitulo',
         'passo1_pergunta', 'passo2_pergunta', 'passo3_titulo', 'passo3_pergunta',
         'passo4_pergunta', 'passo5_pergunta', 'rodape_legal',
