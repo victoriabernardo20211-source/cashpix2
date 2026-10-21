@@ -98,6 +98,10 @@ function makeAdminRouter(adminPath) {
         ? `<span class="text-obs">${escHtml(l.atendido_por)}</span>${l.observacao ? `<span class="text-obs" title="${escHtml(l.observacao)}">💬 ${escHtml(l.observacao).slice(0, 30)}${l.observacao.length > 30 ? '...' : ''}</span>` : ''}`
         : '<span class="text-muted">—</span>';
 
+      const deleteBtn = `<form method="POST" action="/${adminPath}/leads/${l.id}/delete" style="display:inline" onsubmit="return confirm('Apagar este lead?')">
+        <button class="btn btn-sm btn-red" type="submit">🗑️</button>
+      </form>`;
+
       return `<tr>
         <td>${nomeDisplay}</td>
         <td>${cpfDisplay}</td>
@@ -109,7 +113,7 @@ function makeAdminRouter(adminPath) {
         <td>${detectDevice(l.user_agent)}</td>
         <td>${badge}</td>
         <td>${atendimentoDisplay}</td>
-        <td>${acoes}</td>
+        <td style="white-space:nowrap">${acoes} ${deleteBtn}</td>
       </tr>`;
     }).join('');
 
@@ -217,6 +221,18 @@ function makeAdminRouter(adminPath) {
       res.redirect(`/${adminPath}/leads`);
     } catch (err) {
       console.error('[POST /leads/:id/status]', err);
+      res.redirect(`/${adminPath}/leads`);
+    }
+  });
+
+  router.post('/leads/:id/delete', auth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) return res.redirect(`/${adminPath}/leads`);
+      await getPool().query('DELETE FROM leads WHERE id = $1', [id]);
+      res.redirect(`/${adminPath}/leads`);
+    } catch (err) {
+      console.error('[POST /leads/:id/delete]', err);
       res.redirect(`/${adminPath}/leads`);
     }
   });

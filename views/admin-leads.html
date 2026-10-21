@@ -27,7 +27,6 @@
     .metric-value.yellow { color: #d97706; }
     .metric-value.blue { color: #2563eb; }
     .metric-value.purple { color: #7c3aed; }
-    .metric-value.orange { color: #ea580c; }
     .metric-value.gray { color: #9ca3af; }
     .toolbar { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
     .filter-btn { padding: .45rem .9rem; border-radius: 8px; border: 1.5px solid #e5e7eb; background: #fff; font-size: .82rem; cursor: pointer; text-decoration: none; color: #374151; transition: all .15s; }
@@ -54,6 +53,7 @@
     .btn:hover { opacity: .85; }
     .btn-green { background: #22c55e; color: #fff; }
     .btn-yellow { background: #f59e0b; color: #fff; }
+    .btn-red { background: #ef4444; color: #fff; }
     .dev-iphone { color: #1d4ed8; font-size: .82rem; }
     .dev-android { color: #16a34a; font-size: .82rem; }
     .dev-desktop { color: #6b7280; font-size: .82rem; }
@@ -95,7 +95,7 @@
       <thead><tr>
         <th>Nome</th><th>CPF</th><th>Telefone</th><th>Chave Pix</th>
         <th>Fatura</th><th>Cashback</th><th>Data</th><th>Dispositivo</th>
-        <th>Status</th><th>Atendimento</th><th>Ação</th>
+        <th>Status</th><th>Atendimento</th><th>Ações</th>
       </tr></thead>
       <tbody>{{leads_rows}}</tbody>
     </table>
